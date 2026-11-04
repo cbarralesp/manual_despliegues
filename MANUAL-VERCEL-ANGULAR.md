@@ -285,6 +285,18 @@ La publicación tarda de uno a dos minutos. Para seguirla tienes dos opciones:
 - Recarga **Settings → Pages**. Cuando termina, arriba aparece la dirección de tu sitio con un botón para visitarlo.
 - Abre la pestaña **Actions**. Ahí corre un proceso llamado *pages build and deployment*. Cuando queda en verde, el sitio está publicado.
 
+Cuando termina, arriba aparece el aviso *Your site is live at* con la dirección del sitio. Pulsa **Visit site** para abrirlo. El botón rojo **Unpublish site** retira el sitio: no lo pulses si quieres que siga publicado.
+
+![Sitio publicado en Settings, Pages](img/14-github-pages-publicado.png)
+
+*Sitio publicado: la dirección aparece en Settings → Pages.*
+
+Al abrir la dirección ves tu `index.html` funcionando en Internet.
+
+![El manual abierto desde su dirección pública](img/15-sitio-publicado.png)
+
+*El manual abierto desde su dirección pública.*
+
 La dirección sigue siempre este formato:
 
 ```text
