@@ -18,6 +18,7 @@ Guía paso a paso con capturas reales, desde iniciar sesión hasta tener el siti
 8. [Problemas comunes](#problemas-comunes)
 9. [Después del deploy](#después-del-deploy)
 10. [Límites del plan gratis](#límites-del-plan-gratis)
+11. [Anexo: publicar con GitHub Pages](#anexo-publicar-este-manual-con-github-pages)
 
 ---
 
@@ -233,6 +234,31 @@ Según la [documentación oficial de Vercel](https://vercel.com/docs/limits) (re
 
 El plan Hobby no permite conectar repositorios que pertenezcan a una organización de GitHub: el repo debe estar en tu cuenta personal.
 
+---
+
+## Anexo: publicar este manual con GitHub Pages
+
+GitHub Pages convierte un repositorio en un sitio web gratuito. Así el manual queda en una dirección que puedes compartir, sin pagar hosting.
+
+1. Abre el repositorio en GitHub y pulsa **Settings**.
+2. En el menú de la izquierda entra a **Pages**.
+3. En **Source** elige *Deploy from a branch*.
+4. En **Branch** selecciona `main` y la carpeta `/ (root)`.
+5. Pulsa **Save**.
+
+![GitHub Pages: Settings, Pages](img/12-github-pages.png)
+
+*Settings → Pages antes de guardar. El mensaje «GitHub Pages is currently disabled» indica que todavía no está activado.*
+
+En uno o dos minutos el sitio queda publicado en esta dirección:
+
+```text
+https://<usuario>.github.io/<repositorio>/
+```
+
+La URL también aparece arriba en la misma pantalla de Pages cuando termina la publicación. Desde entonces, cada `git push` a `main` actualiza el sitio solo.
+
+> **Requisitos:** en el plan gratis el repositorio debe ser público. La página principal tiene que llamarse `index.html` y estar en la raíz. Si el sitio muestra 404 justo después de guardar, espera un par de minutos y recarga.
 ---
 
 *Manual elaborado con capturas reales de un despliegue de Angular 21 en Vercel. Los nombres de pantallas y botones están en inglés porque así los muestra Vercel.*

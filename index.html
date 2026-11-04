@@ -131,6 +131,7 @@ footer{padding-top:32px;border-top:1px solid var(--line);font-size:14px;color:va
     <li><a href="#problemas">Problemas comunes</a></li>
     <li><a href="#despues">Después del deploy</a></li>
     <li><a href="#limites">Límites del plan gratis</a></li>
+    <li><a href="#pages">Anexo: GitHub Pages</a></li>
   </ol>
 </nav>
 
@@ -312,6 +313,22 @@ npm run build</code></pre>
   <p>El plan Hobby no permite conectar repositorios que pertenezcan a una organización de GitHub: el repo debe estar en tu cuenta personal.</p>
 </section>
 
+<section class="block" id="pages">
+  <h2>Anexo: publicar este manual con GitHub Pages</h2>
+  <p>GitHub Pages convierte un repositorio en un sitio web gratuito. Así el manual queda en una dirección que puedes compartir, sin pagar hosting.</p>
+  <ol class="l">
+    <li>Abre el repositorio en GitHub y pulsa <strong>Settings</strong>.</li>
+    <li>En el menú de la izquierda entra a <strong>Pages</strong>.</li>
+    <li>En <strong>Source</strong> elige <em>Deploy from a branch</em>.</li>
+    <li>En <strong>Branch</strong> selecciona <code>main</code> y la carpeta <code>/ (root)</code>.</li>
+    <li>Pulsa <strong>Save</strong>.</li>
+  </ol>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/12-github-pages.png" alt="Página Settings, Pages de un repositorio con Deploy from a branch, main y / (root)" loading="lazy"></button><figcaption>Settings → Pages antes de guardar. El mensaje «GitHub Pages is currently disabled» indica que todavía no está activado.</figcaption></figure>
+  <p>En uno o dos minutos el sitio queda publicado en esta dirección:</p>
+  <pre><button class="copy" type="button">Copiar</button><code>https://&lt;usuario&gt;.github.io/&lt;repositorio&gt;/</code></pre>
+  <p>La URL también aparece arriba en la misma pantalla de Pages cuando termina la publicación. Desde entonces, cada <code>git push</code> a <code>main</code> actualiza el sitio solo.</p>
+  <div class="note"><strong>Requisitos</strong>En el plan gratis el repositorio debe ser público. La página principal tiene que llamarse <code>index.html</code> y estar en la raíz. Si el sitio muestra 404 justo después de guardar, espera un par de minutos y recarga.</div>
+</section>
 <footer>Manual elaborado con capturas reales de un despliegue de Angular 21 en Vercel. Los nombres de pantallas y botones están en inglés porque así los muestra Vercel.</footer>
 </main>
 </div>
