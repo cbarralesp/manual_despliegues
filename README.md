@@ -9,6 +9,7 @@ Guías paso a paso, con capturas reales, para llevar proyectos a producción.
 | 1 | Subir un proyecto Angular a Vercel desde GitHub | Completo |
 | 2 | Backend Spring Boot en Render | Pendiente |
 | 3 | Base de datos PostgreSQL en Supabase | Pendiente |
+| Anexo | Publicar un sitio estático en GitHub Pages | Completo |
 
 ## Parte 1: Angular en Vercel
 

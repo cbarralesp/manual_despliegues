@@ -18,7 +18,7 @@ Guía paso a paso con capturas reales, desde iniciar sesión hasta tener el siti
 8. [Problemas comunes](#problemas-comunes)
 9. [Después del deploy](#después-del-deploy)
 10. [Límites del plan gratis](#límites-del-plan-gratis)
-11. [Anexo: publicar con GitHub Pages](#anexo-publicar-este-manual-con-github-pages)
+11. [Publicar en GitHub Pages](#publicar-en-github-pages)
 
 ---
 
@@ -236,29 +236,77 @@ El plan Hobby no permite conectar repositorios que pertenezcan a una organizaci�
 
 ---
 
-## Anexo: publicar este manual con GitHub Pages
+## Publicar en GitHub Pages
 
-GitHub Pages convierte un repositorio en un sitio web gratuito. Así el manual queda en una dirección que puedes compartir, sin pagar hosting.
+GitHub Pages publica sitios estáticos (HTML, CSS, JavaScript e imágenes) directamente desde un repositorio, gratis y sin servidor. Sirve para documentación, portafolios y manuales como este. No ejecuta backends. Una aplicación Angular necesita compilarse antes, y para eso Vercel es más cómodo.
 
-1. Abre el repositorio en GitHub y pulsa **Settings**.
-2. En el menú de la izquierda entra a **Pages**.
-3. En **Source** elige *Deploy from a branch*.
-4. En **Branch** selecciona `main` y la carpeta `/ (root)`.
-5. Pulsa **Save**.
+### Antes de empezar
 
-![GitHub Pages: Settings, Pages](img/12-github-pages.png)
+- [ ] Un repositorio en GitHub. En el plan gratis debe ser **público**.
+- [ ] Un archivo llamado `index.html` en la **raíz** del repositorio. Es la página de inicio del sitio.
+- [ ] Los archivos ya subidos a la rama `main`.
+
+### Paso 1. Subir los archivos
+
+Desde la carpeta de tu proyecto:
+
+```bash
+git add .
+git commit -m "Publicar sitio"
+git push origin main
+```
+
+### Paso 2. Abrir Settings → Pages
+
+En el repositorio pulsa **Settings** y, en el menú de la izquierda, entra a **Pages**.
+
+### Paso 3. Elegir de dónde se publica
+
+1. En **Source** elige *Deploy from a branch*.
+2. En **Branch** selecciona `main` y la carpeta `/ (root)`.
+3. Pulsa **Save**.
+
+![Settings, Pages antes de guardar](img/12-github-pages.png)
 
 *Settings → Pages antes de guardar. El mensaje «GitHub Pages is currently disabled» indica que todavía no está activado.*
 
-En uno o dos minutos el sitio queda publicado en esta dirección:
+### Paso 4. Confirmar que se guardó
+
+Aparece una franja azul con *GitHub Pages source saved*. Debajo, el texto cambia a *Your GitHub Pages site is currently being built from the main branch*. Eso significa que GitHub empezó a construir el sitio.
+
+![Settings, Pages con la configuración guardada](img/13-github-pages-guardado.png)
+
+*Configuración guardada: el sitio se está construyendo desde la rama `main`.*
+
+### Paso 5. Esperar y abrir el sitio
+
+La publicación tarda de uno a dos minutos. Para seguirla tienes dos opciones:
+
+- Recarga **Settings → Pages**. Cuando termina, arriba aparece la dirección de tu sitio con un botón para visitarlo.
+- Abre la pestaña **Actions**. Ahí corre un proceso llamado *pages build and deployment*. Cuando queda en verde, el sitio está publicado.
+
+La dirección sigue siempre este formato:
 
 ```text
 https://<usuario>.github.io/<repositorio>/
 ```
 
-La URL también aparece arriba en la misma pantalla de Pages cuando termina la publicación. Desde entonces, cada `git push` a `main` actualiza el sitio solo.
+Por ejemplo, para el usuario `cbarralesp` y el repositorio `manual_despliegues`: `https://cbarralesp.github.io/manual_despliegues/`.
 
-> **Requisitos:** en el plan gratis el repositorio debe ser público. La página principal tiene que llamarse `index.html` y estar en la raíz. Si el sitio muestra 404 justo después de guardar, espera un par de minutos y recarga.
+### Actualizar el sitio
+
+No hay que repetir la configuración. Cada `git push` a `main` vuelve a publicar el sitio en uno o dos minutos.
+
+### Problemas comunes
+
+**Sale 404 al abrir la dirección.** Espera un par de minutos y recarga. Si sigue igual, confirma que `index.html` esté en la raíz del repo, no dentro de una carpeta, y que en Pages esté seleccionada la carpeta `/ (root)`.
+
+**La página abre, pero sin estilos o sin imágenes.** Casi siempre son rutas mal escritas. Usa rutas relativas como `img/foto.png`, sin `/` al inicio. GitHub Pages distingue mayúsculas y minúsculas: `Foto.png` y `foto.png` son archivos distintos.
+
+**No me aparece la opción de Pages o no me deja activarla.** Revisa que el repositorio sea público. En el plan gratis, Pages no funciona con repositorios privados.
+
+**Hice push, pero el sitio no cambia.** Espera uno o dos minutos y recarga con `Ctrl + F5`. Si sigue igual, revisa la pestaña **Actions**: un proceso en rojo indica un error de publicación.
+
 ---
 
 *Manual elaborado con capturas reales de un despliegue de Angular 21 en Vercel. Los nombres de pantallas y botones están en inglés porque así los muestra Vercel.*
