@@ -3,26 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Guía paso a paso para desplegar un proyecto Angular en Vercel desde GitHub.">
-<title>Manual Angular en Vercel</title>
+<meta name="description" content="Guía paso a paso para desplegar una aplicación completa: base de datos en Supabase, backend Spring Boot en Render y frontend Angular en Vercel.">
+<title>Manual de despliegue en la nube</title>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Concepto: manual de campo en una columna de lectura, con índice lateral fijo y capturas como protagonistas.
-   Color: tinta fría + rojo Angular solo para pasos y avisos. Tipos: Bricolage (títulos), Instrument Sans (texto), JetBrains Mono (comandos). */
+   Color: tinta fría + violeta Render solo para pasos y avisos. Tipos: Bricolage (títulos), Instrument Sans (texto), JetBrains Mono (comandos). */
 :root{
   --bg:#f6f7f9; --surface:#ffffff; --ink:#14161a; --muted:#5a616c; --line:#dde0e6;
-  --accent:#c4002b; --accent-ink:#ffffff; --code:#eceef2; --ok:#1a7f4b; --warn:#9a5b00; --warn-bg:#fff4dd;
+  --accent:#5b2fd6; --accent-ink:#ffffff; --code:#eceef2; --ok:#1a7f4b; --warn:#9a5b00; --warn-bg:#fff4dd;
   --font-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --font-body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
   --font-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0f1115; --surface:#171a20; --ink:#eceef2; --muted:#9aa1ac; --line:#2a2e37;
-  --accent:#ff5a78; --accent-ink:#14161a; --code:#1f232b; --ok:#4ad08a; --warn:#f0b24a; --warn-bg:#2a2214; color-scheme:dark}}
+  --accent:#a78bfa; --accent-ink:#14161a; --code:#1f232b; --ok:#4ad08a; --warn:#f0b24a; --warn-bg:#2a2214; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0f1115; --surface:#171a20; --ink:#eceef2; --muted:#9aa1ac; --line:#2a2e37;
-  --accent:#ff5a78; --accent-ink:#14161a; --code:#1f232b; --ok:#4ad08a; --warn:#f0b24a; --warn-bg:#2a2214; color-scheme:dark}
+  --accent:#a78bfa; --accent-ink:#14161a; --code:#1f232b; --ok:#4ad08a; --warn:#f0b24a; --warn-bg:#2a2214; color-scheme:dark}
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -100,20 +100,31 @@ dialog.zoom::backdrop{background:rgba(0,0,0,.78)}
 dialog.zoom img{display:block;max-width:96vw;max-height:94vh;border-radius:8px;cursor:zoom-out}
 footer{padding-top:32px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+h4{font-family:var(--font-display);font-size:16px;margin:22px 0 6px}
+.pend{border:1px dashed var(--line);border-radius:10px;padding:14px 16px;background:var(--surface);color:var(--muted);margin:12px 0}
+.pend strong{color:var(--ink)}
+h4{font-family:var(--font-display);font-size:16px;margin:22px 0 6px}
+/* Portadas de parte: separan Base de datos / Backend / Frontend */
+.part{margin:88px 0 16px;padding:34px 30px;background:var(--accent);color:var(--accent-ink);border-radius:14px}
+.part .pn{display:block;font-family:var(--font-mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-bottom:8px}
+.part h2.pt{font-family:var(--font-display);font-size:clamp(40px,8vw,68px);line-height:1;letter-spacing:-.02em;margin:0 0 10px;color:inherit}
+.part p{margin:0;font-size:18px;opacity:.92}
+.part + section.block{border-top:0;padding-top:28px}
+nav.toc li.grp{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:14px 0 2px;font-weight:500}
+@media (max-width:959px){nav.toc li.grp{flex-basis:100%;margin:6px 0 0}}
 </style>
 </head>
 <body>
 
-
 <div class="wrap">
 <header class="top">
-  <p class="eyebrow">Angular 21 · Vercel · GitHub</p>
-  <h1>Subir un proyecto Angular a Vercel</h1>
-  <p class="lede">Paso a paso con capturas reales, desde iniciar sesión hasta tener el sitio publicado. El ejemplo es un tablero Kanban hecho con Angular 21 y alojado en GitHub, desplegado en el plan gratuito.</p>
+  <p class="eyebrow">Supabase · Spring Boot · Render · Angular · Vercel</p>
+  <h1>Desplegar el tablero Kanban en la nube</h1>
+  <p class="lede">Paso a paso con capturas reales para publicar una aplicación completa con planes gratuitos: la base de datos PostgreSQL en Supabase, el backend Spring Boot en Render y el frontend Angular en Vercel, conectados entre sí.</p>
   <ul class="meta">
-    <li><b>Repositorio de ejemplo:</b> <code>cbarralesp/kanban-frontend</code></li>
-    <li><b>Plan:</b> Hobby (gratis)</li>
-    <li><b>Tiempo de despliegue:</b> 26 segundos</li>
+    <li><b>Backend:</b> <code>cbarralesp/kanban_backend</code></li>
+    <li><b>Frontend:</b> <code>cbarralesp/kanban-frontend</code></li>
+    <li><b>Planes:</b> Supabase Free · Render Free · Vercel Hobby</li>
   </ul>
 </header>
 
@@ -122,16 +133,27 @@ footer{padding-top:32px;border-top:1px solid var(--line);font-size:14px;color:va
   <h2>En esta guía</h2>
   <ol>
     <li><a href="#antes">Antes de empezar</a></li>
-    <li><a href="#p1">1. Iniciar sesión</a></li>
-    <li><a href="#p2">2. Nuevo proyecto</a></li>
-    <li><a href="#p3">3. Dar acceso al repo</a></li>
-    <li><a href="#p4">4. Configurar</a></li>
-    <li><a href="#p5">5. Deploy</a></li>
+    <li class="grp">Parte 1 · Base de datos</li>
+    <li><a href="#p1">1. Supabase</a></li>
+    <li class="grp">Parte 2 · Backend</li>
+    <li><a href="#p2">2. Preparar el código</a></li>
+    <li><a href="#p3">3. Compilar en Eclipse</a></li>
+    <li><a href="#p4">4. Subir a GitHub</a></li>
+    <li><a href="#p5">5. Web Service en Render</a></li>
     <li><a href="#p6">6. Resultado</a></li>
-    <li><a href="#problemas">Problemas comunes</a></li>
-    <li><a href="#despues">Después del deploy</a></li>
-    <li><a href="#limites">Límites del plan gratis</a></li>
+    <li class="grp">Parte 3 · Frontend</li>
+    <li><a href="#f1">7. Iniciar sesión</a></li>
+    <li><a href="#f2">8. Nuevo proyecto</a></li>
+    <li><a href="#f3">9. Dar acceso al repo</a></li>
+    <li><a href="#f4">10. Configurar</a></li>
+    <li><a href="#f5">11. Deploy</a></li>
+    <li><a href="#f6">12. Resultado</a></li>
+    <li><a href="#f7">13. Conectar con el backend</a></li>
+    <li class="grp">Anexos</li>
+    <li><a href="#heidi">HeidiSQL</a></li>
     <li><a href="#pages">GitHub Pages</a></li>
+    <li><a href="#problemas">Problemas comunes</a></li>
+    <li><a href="#limites">Límites del plan gratis</a></li>
   </ol>
 </nav>
 
@@ -139,58 +161,400 @@ footer{padding-top:32px;border-top:1px solid var(--line);font-size:14px;color:va
 
 <section class="block" id="antes">
   <h2>Antes de empezar</h2>
-  <p>Vercel no recibe el proyecto por correo ni por carpeta: lo lee desde un repositorio Git y lo compila en sus servidores. Por eso necesitas tres cosas.</p>
+  <p><strong>En todo el proceso no necesitas Docker Hub:</strong> Render lee tu <code>Dockerfile</code> desde GitHub y construye la imagen en sus servidores. Tú solo subes el código con <code>git push</code>.</p>
+  <p>Render no tiene un entorno nativo para Java, por eso se usa el lenguaje <strong>Docker</strong>: el <code>Dockerfile</code> le explica cómo compilar y ejecutar la aplicación.</p>
   <ul class="check">
-    <li><span><b>Un repositorio en GitHub</b> con tu proyecto Angular ya subido (rama <code>main</code>). Debe estar en tu usuario personal si usas el plan gratis.</span></li>
-    <li><span><b>Una cuenta en Vercel.</b> Puedes entrar con Google, GitHub o correo. Con GitHub el repositorio queda enlazado más rápido.</span></li>
-    <li><span><b>Un proyecto que compile.</b> Pruébalo en tu equipo antes de subir:</span></li>
+    <li><span><b>Un repositorio en GitHub</b> con el backend (rama <code>main</code>), en tu cuenta personal.</span></li>
+    <li><span><b>Una cuenta en Render</b> (<a href="https://render.com" target="_blank" rel="noopener">render.com</a>). Puedes entrar con GitHub.</span></li>
+    <li><span><b>Una cuenta en Supabase</b> (<a href="https://supabase.com" target="_blank" rel="noopener">supabase.com</a>) para la base de datos PostgreSQL.</span></li>
+    <li><span><b>Una cuenta en Vercel</b> (<a href="https://vercel.com" target="_blank" rel="noopener">vercel.com</a>) y un repositorio de GitHub con el frontend Angular, para la parte 3.</span></li>
+    <li><span><b>Un proyecto que compile</b> en tu equipo (paso 3). Si falla ahí, también fallará en Render.</span></li>
   </ul>
-  <pre><button class="copy" type="button">Copiar</button><code>npm install
-npm run build</code></pre>
-  <p>Si ese comando falla en tu equipo, también fallará en Vercel. La carpeta con el resultado queda en <code>dist/&lt;nombre-del-proyecto&gt;/browser</code>.</p>
+
+  <h3>El orden del proceso y por qué</h3>
+  <p>El proyecto tiene tres piezas que dependen unas de otras, y se despliegan en este orden: primero la <strong>base de datos</strong>, luego el <strong>backend</strong> y al final el <strong>frontend</strong>. El backend no puede funcionar sin base de datos: al arrancar se conecta a PostgreSQL y Flyway crea las tablas. Render, además, te pide los datos de conexión al crear el servicio. El front, a su vez, necesita la dirección pública del backend.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Parte</th><th>Pasos</th><th>Dónde</th><th>Qué se obtiene</th></tr></thead>
+    <tbody>
+      <tr><td>1. Base de datos</td><td>1</td><td>Supabase</td><td>Un PostgreSQL vacío y sus datos de conexión (host, puerto, usuario, contraseña).</td></tr>
+      <tr><td>2. Backend</td><td>2 a 6</td><td>Eclipse, GitHub y Render</td><td>El código preparado, subido y desplegado, conectado a esa base. Una URL pública de la API.</td></tr>
+      <tr><td>3. Frontend</td><td>7 a 13</td><td>GitHub y Vercel</td><td>El tablero publicado, hablando con la API de Render.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><strong>Idea clave</strong>Cada parte entrega un dato a la siguiente: de la base salen los datos de conexión (variables de entorno del paso 5), y del backend sale la URL pública que usa el front (paso 13). Si cambias el orden, el servicio arrancaría con error o el front no tendría con qué hablar.</div>
 </section>
 
+<div class="part" id="parte1">
+  <span class="pn">Parte 1</span>
+  <h2 class="pt">Base de datos</h2>
+  <p>Supabase · PostgreSQL. Se crea primero: sus datos de conexión se usan después en el backend.</p>
+</div>
 <section class="block" id="p1">
-  <div class="step-h"><span class="n">1</span><h2>Iniciar sesión en Vercel</h2></div>
-  <p>Entra a <a href="https://vercel.com/login" target="_blank" rel="noopener">vercel.com/login</a> y elige tu método. Vercel marca con <em>Last Used</em> el que usaste la última vez.</p>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/01-login.png" alt="Pantalla Log in to Vercel con opciones de correo, Google, GitHub y ChatGPT" loading="lazy"></button><figcaption>Pantalla de inicio de sesión de Vercel.</figcaption></figure>
+  <div class="step-h"><span class="n">1</span><h2>Crear la base de datos en Supabase</h2></div>
+  <p>Este es el primer paso: el backend necesita una base PostgreSQL, y los datos de conexión que obtengas aquí los usarás después en Render (paso 5). No hay que "subir" nada: el proyecto se crea vacío y Flyway crea las tablas la primera vez que arranca la aplicación.</p>
 
-  <h3>Si tu cuenta tiene verificación en dos pasos</h3>
-  <p>Vercel pide el código de 6 dígitos de tu app de autenticación. Escríbelo y pulsa <strong>Verify</strong>. Si perdiste el acceso, usa <em>Use a Recovery Code Instead</em>.</p>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/02-verificacion.png" alt="Pantalla Open Your Authenticator App con seis casillas para el código" loading="lazy"></button><figcaption>Verificación en dos pasos (2FA).</figcaption></figure>
-  <div class="note"><strong>Seguridad</strong>No compartas capturas con la dirección completa de esta pantalla: la URL lleva un token temporal.</div>
+  <h3>1.1 Entrar a Supabase</h3>
+  <p>Ve a <a href="https://supabase.com/database" target="_blank" rel="noopener">supabase.com</a>, inicia sesión (con GitHub, por ejemplo) y pulsa <strong>Dashboard</strong>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/11-supabase-inicio.png" alt="Página de inicio de Supabase con los botones Start your project y Dashboard" loading="lazy"></button><figcaption>Página de inicio de Supabase: botón <strong>Dashboard</strong> arriba a la derecha.</figcaption></figure>
+
+  <h3>1.2 Nuevo proyecto</h3>
+  <p>En <strong>Projects</strong> pulsa el botón verde <strong>New project</strong>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/12-supabase-proyectos.png" alt="Lista de proyectos de Supabase con el botón New project" loading="lazy"></button><figcaption>Lista de proyectos de la organización. En este ejemplo ya existe otro proyecto.</figcaption></figure>
+
+  <h3>1.3 Datos del proyecto</h3>
+  <p>En <strong>Create a new project</strong> completa:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Campo</th><th>Qué poner</th></tr></thead>
+    <tbody>
+      <tr><td>Organization</td><td>Tu organización personal (plan Free).</td></tr>
+      <tr><td>GitHub (optional)</td><td>No conectar.</td></tr>
+      <tr><td>Project name</td><td><code>kanban_db</code></td></tr>
+      <tr><td>Database password</td><td>Una contraseña fuerte (ver aviso abajo).</td></tr>
+      <tr><td>Region</td><td>La más cercana de la lista (aquí <em>Americas</em>).</td></tr>
+    </tbody>
+  </table></div>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/13-supabase-nuevo-proyecto.png" alt="Formulario Create a new project con la organización y los campos vacíos" loading="lazy"></button><figcaption>Formulario de nuevo proyecto, aún vacío.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/14-supabase-password-region.png" alt="Formulario con el nombre kanban_db, la contraseña oculta y la región Americas" loading="lazy"></button><figcaption>Nombre, contraseña (oculta) y región.</figcaption></figure>
+  <div class="note warn"><strong>Seguridad</strong>Usa <em>Generate a password</em> y pulsa <em>Copy</em>. Guárdala en un lugar seguro: la necesitarás en Render como <code>DB_PASSWORD</code>. No la subas a Git ni la dejes visible en capturas o en el chat.</div>
+
+  <h3>1.4 Seguridad: desactivar la Data API</h3>
+  <p>Más abajo, en <strong>Security</strong>, deja <strong>desmarcados</strong> <em>Enable Data API</em> y <em>Enable automatic RLS</em>. Spring Boot se conecta directo a PostgreSQL y no usa esa API. El aviso amarillo («Client libraries need Data API…») solo advierte que <code>supabase-js</code> no podría consultar los datos; a nosotros no nos afecta.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/15-supabase-seguridad.png" alt="Sección Security con Enable Data API y Enable automatic RLS desmarcados" loading="lazy"></button><figcaption>Sección Security con la Data API desactivada.</figcaption></figure>
+  <p>Pulsa <strong>Create new project</strong>.</p>
+
+  <h3>1.5 Esperar a que el proyecto esté listo</h3>
+  <p>Se abre el panel del proyecto con el estado <em>Coming up…</em>. Al pasar el cursor sobre el estado se despliega el detalle de cada servicio. Algunos pasan a <em>Healthy</em> enseguida (Database, Edge Functions) y otros siguen en <em>Coming up…</em> (Auth, Realtime, Storage). <em>PostgREST: Disabled</em> es lo esperado, porque desactivaste la Data API.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/16-supabase-creado.png" alt="Panel del proyecto kanban_db con el estado Coming up y el botón Connect" loading="lazy"></button><figcaption>Proyecto creado, todavía iniciándose.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/17-supabase-iniciando.png" alt="Detalle del estado con Database Healthy, PostgREST Disabled y Auth, Realtime y Storage en Coming up" loading="lazy"></button><figcaption>Detalle del estado: Database ya está <em>Healthy</em>; el resto sigue iniciando.</figcaption></figure>
+  <div class="note warn"><strong>Sé paciente</strong>Supabase avisa que un proyecto nuevo puede tardar <strong>hasta 5 minutos</strong> en quedar totalmente operativo. No sigas al paso siguiente ni recargues una y otra vez: espera a que el estado deje de decir <em>Coming up…</em> y el botón <strong>Connect</strong> se vea activo (verde intenso). Si conectas antes de tiempo, el backend puede fallar al arrancar por no alcanzar la base. Si pasados los 5 minutos algún servicio sigue sin estar sano, revisa la documentación del enlace que muestra el propio panel.</div>
+
+  <h3>1.6 Obtener los datos de conexión</h3>
+  <p>Cuando el estado diga <strong>Healthy</strong> y el botón <strong>Connect</strong> esté en verde intenso, púlsalo.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/18-supabase-healthy.png" alt="Panel del proyecto con el estado Healthy y el botón Connect activo" loading="lazy"></button><figcaption>Proyecto listo: estado <em>Healthy</em> y botón <strong>Connect</strong> activo.</figcaption></figure>
+  <p>Se abre <strong>Connect to your project</strong>. Entra en la pestaña <strong>Direct · Connection string</strong> (la tercera). La pestaña <em>Framework</em>, que es la que abre por defecto, no sirve para Spring Boot y muestra un aviso sobre la Data API: ignóralo, <strong>no pulses «Enable Data API»</strong>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/19-supabase-connect.png" alt="Ventana Connect to your project con la pestaña Framework y el aviso Database access requires the Data API" loading="lazy"></button><figcaption>La ventana abre en <em>Framework</em>; hay que cambiar a <em>Direct · Connection string</em>.</figcaption></figure>
+  <p>En <strong>Connection Method</strong> está marcado <em>Direct connection</em> por defecto. Cámbialo a <strong>Session pooler</strong>.</p>
+  <div class="note warn"><strong>Importante</strong><em>Direct connection</em> usa IPv6 y Render Free conecta por IPv4, así que no la alcanzaría. El <em>Session pooler</em> es el método pensado para redes IPv4 y es gratis. No uses <em>Transaction pooler</em>: Flyway tiene problemas con él. Tampoco pulses <em>Enable IPv4 add-on</em> (es de pago) ni <em>Reset database password</em>.</div>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/20-supabase-session-pooler.png" alt="Connection Method con Session pooler seleccionado" loading="lazy"></button><figcaption><strong>Session pooler</strong> seleccionado.</figcaption></figure>
+  <p>Baja hasta <strong>Connection parameters</strong>. Ahí están los datos que pide Render. Cada uno tiene un botón para copiarlo.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/21-supabase-parametros.png" alt="Connection parameters del Session pooler con host, port, database y user" loading="lazy"></button><figcaption>Parámetros del Session pooler. La contraseña no aparece: es la que generaste al crear el proyecto.</figcaption></figure>
+  <div class="tw"><table>
+    <thead><tr><th>Variable en Render</th><th>Valor de este ejemplo</th></tr></thead>
+    <tbody>
+      <tr><td>DB_HOST</td><td><code>aws-1-us-east-1.pooler.supabase.com</code></td></tr>
+      <tr><td>DB_PORT</td><td><code>5432</code></td></tr>
+      <tr><td>DB_NAME</td><td><code>postgres</code></td></tr>
+      <tr><td>DB_USER</td><td><code>postgres.&lt;ref-del-proyecto&gt;</code> (aquí <code>postgres.eiyevccayagorfpjsmph</code>)</td></tr>
+      <tr><td>DB_PASSWORD</td><td>La contraseña que guardaste en el paso 1.3</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><strong>Ojo</strong>El host y el usuario cambian en cada proyecto: copia los de tu pantalla, no los de este ejemplo. El usuario del pooler lleva el punto y el identificador del proyecto (<code>postgres.xxxx</code>), no es solo <code>postgres</code>.</div>
 </section>
 
+<div class="part" id="parte2">
+  <span class="pn">Parte 2</span>
+  <h2 class="pt">Backend</h2>
+  <p>Spring Boot · Docker · GitHub · Render. Se prepara el código, se sube a GitHub y se despliega conectado a la base.</p>
+</div>
 <section class="block" id="p2">
-  <div class="step-h"><span class="n">2</span><h2>Crear un proyecto nuevo</h2></div>
-  <p>En el panel principal pulsa <strong>Create New</strong> (arriba a la derecha) y luego <strong>Project</strong>. El menú también ofrece Domain, Store, Integration y otras opciones que no necesitas ahora.</p>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/03-dashboard.png" alt="Panel de Vercel con el menú Create New desplegado" loading="lazy"></button><figcaption>Panel del equipo: Create New → Project.</figcaption></figure>
-  <p>Se abre <strong>Import Git Repository</strong>, con la lista de repositorios de tu cuenta de GitHub. Cada uno tiene un botón <strong>Import</strong>.</p>
+  <div class="step-h"><span class="n">2</span><h2>Preparar el código</h2></div>
+  <p>Se crean dos archivos en la <strong>raíz del proyecto</strong> (junto a <code>pom.xml</code>) y se modifican dos existentes.</p>
+  <pre><button class="copy" type="button">Copiar</button><code>kanban-backend\
+├── pom.xml             ← se modifica
+├── Dockerfile          ← se crea
+├── .dockerignore       ← se crea
+└── src\main\resources\application.yml   ← se modifica</code></pre>
+
+  <h3>2.1 Crear el Dockerfile</h3>
+  <p>En Eclipse: clic derecho sobre el proyecto → <strong>New → File</strong>. El nombre es exactamente <code>Dockerfile</code>, sin extensión.</p>
+  <pre><button class="copy" type="button">Copiar</button><code># ---------- Etapa 1: compilar con Maven ----------
+FROM maven:3.9.9-eclipse-temurin-21 AS build
+WORKDIR /workspace
+COPY pom.xml ./
+RUN mvn -B dependency:go-offline
+COPY src ./src
+RUN mvn -B -DskipTests package
+
+# ---------- Etapa 2: imagen liviana solo con el JRE ----------
+FROM eclipse-temurin:21-jre-jammy
+WORKDIR /app
+RUN groupadd --system app &amp;&amp; useradd --system --gid app app \
+    &amp;&amp; mkdir /app/logs &amp;&amp; chown app:app /app/logs
+COPY --from=build --chown=app:app /workspace/target/kanban-backend-*.jar app.jar
+USER app
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]</code></pre>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/02-dockerfile.png" alt="Editor de Eclipse con el contenido del Dockerfile" loading="lazy"></button><figcaption>El Dockerfile abierto en Eclipse.</figcaption></figure>
+  <div class="tw"><table>
+    <thead><tr><th>Parte</th><th>Para qué sirve</th></tr></thead>
+    <tbody>
+      <tr><td>Etapa 1 (maven)</td><td>Compila el proyecto y genera el <code>.jar</code>.</td></tr>
+      <tr><td>Etapa 2 (jre)</td><td>Imagen final pequeña: solo lo necesario para ejecutar.</td></tr>
+      <tr><td>useradd app</td><td>La aplicación no corre como administrador.</td></tr>
+      <tr><td>mkdir /app/logs</td><td>El proyecto escribe logs en <code>logs/</code>; sin la carpeta, el usuario <code>app</code> no podría crearla.</td></tr>
+      <tr><td>kanban-backend-*.jar</td><td>Debe coincidir con el <code>artifactId</code> y la <code>version</code> de tu <code>pom.xml</code>.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>2.2 Crear el .dockerignore</h3>
+  <p>Evita enviar archivos innecesarios a la construcción. Mismo lugar, archivo <code>.dockerignore</code>:</p>
+  <pre><button class="copy" type="button">Copiar</button><code>target
+.git
+.idea
+.vscode
+.settings
+logs
+*.log</code></pre>
+
+  <h3>2.3 Agregar Actuator al pom.xml</h3>
+  <p>Dentro de <code>&lt;dependencies&gt;</code> agrega esta dependencia. Da la ruta <code>/actuator/health</code>, que Render usa para saber si la aplicación está viva.</p>
+  <pre><button class="copy" type="button">Copiar</button><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/03-pom-actuator.png" alt="pom.xml en Eclipse con la dependencia spring-boot-starter-actuator" loading="lazy"></button><figcaption>La dependencia de Actuator al inicio de <code>&lt;dependencies&gt;</code>.</figcaption></figure>
+  <div class="note"><strong>Eclipse</strong>Después de editar el <code>pom.xml</code>, clic derecho en el proyecto → <em>Maven → Update Project…</em> → OK, para que descargue la dependencia.</div>
+
+  <h3>2.4 Modificar application.yml</h3>
+  <p>Tres cambios en <code>src/main/resources/application.yml</code>.</p>
+  <p><strong>a) Puerto.</strong> Render entrega el puerto en la variable <code>PORT</code>:</p>
+  <pre><button class="copy" type="button">Copiar</button><code>server:
+  port: ${PORT:${SERVER_PORT:8083}}</code></pre>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/01-application-yml.png" alt="application.yml en Eclipse con el puerto leído desde PORT" loading="lazy"></button><figcaption>El puerto ahora lee <code>PORT</code>; en local sigue siendo 8083.</figcaption></figure>
+  <p><strong>b) Conexión segura a la base de datos.</strong> Supabase exige SSL. Agrega <code>?sslmode=</code> al final de la URL:</p>
+  <pre><button class="copy" type="button">Copiar</button><code>spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:kanban_db}?sslmode=${DB_SSL_MODE:prefer}</code></pre>
+  <p><strong>c) Exponer el health check</strong> y bajar el ruido del log SQL:</p>
+  <pre><button class="copy" type="button">Copiar</button><code>management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+logging:
+  level:
+    org.hibernate.SQL: ${LOG_LEVEL_SQL:INFO}</code></pre>
+  <p>En tu equipo, la variable <code>LOG_LEVEL_SQL=DEBUG</code> vuelve a mostrar el SQL.</p>
 </section>
 
 <section class="block" id="p3">
-  <div class="step-h"><span class="n">3</span><h2>Dar acceso al repositorio</h2></div>
+  <div class="step-h"><span class="n">3</span><h2>Compilar en Eclipse</h2></div>
+  <p>Antes de subir nada, comprueba que el proyecto compila. En el Project Explorer haz clic derecho sobre el proyecto y elige <strong>Run As → Maven build…</strong> (con los tres puntos).</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/04-run-as-maven.png" alt="Menú Run As con la opción Maven build…" loading="lazy"></button><figcaption>Run As → Maven build…</figcaption></figure>
+  <p>En la ventana <strong>Edit Configuration</strong>:</p>
+  <ul class="l">
+    <li><strong>Goals:</strong> <code>package</code></li>
+    <li>Marca <strong>Skip Tests</strong>.</li>
+    <li>Pulsa <strong>Run</strong>.</li>
+  </ul>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/05-maven-config.png" alt="Ventana Edit Configuration con Goals package y Skip Tests marcado" loading="lazy"></button><figcaption>Goals: <code>package</code> y Skip Tests activado.</figcaption></figure>
+  <p>En la pestaña <strong>Console</strong> debe aparecer <strong>BUILD SUCCESS</strong>. El jar queda en <code>target/kanban-backend-1.0.0.jar</code>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/06-build-success.png" alt="Consola de Eclipse con BUILD SUCCESS" loading="lazy"></button><figcaption>Compilación correcta.</figcaption></figure>
+  <div class="note warn"><strong>Si falla</strong>Revisa que Eclipse use JDK 21 (<em>Window → Preferences → Java → Installed JREs</em>) y que hayas hecho <em>Maven → Update Project</em>. Corrígelo aquí antes de seguir.</div>
+  <p>Alternativa en terminal, desde la carpeta que contiene <code>pom.xml</code>:</p>
+  <pre><button class="copy" type="button">Copiar</button><code>.\mvnw.cmd -DskipTests package</code></pre>
+</section>
+
+<section class="block" id="p4">
+  <div class="step-h"><span class="n">4</span><h2>Subir el código a GitHub</h2></div>
+  <p>Render lee el código desde GitHub, así que primero hay que subir los cambios. Los comandos se escriben en <strong>Git Bash</strong>.</p>
+
+  <h3>4.1 Abrir Git Bash en la carpeta del proyecto</h3>
+  <p>En el Explorador de archivos entra a la carpeta del backend (la que contiene <code>pom.xml</code>, ahora con <code>Dockerfile</code> y <code>.dockerignore</code>). Clic derecho en un espacio vacío → <strong>Mostrar más opciones → Open Git Bash here</strong>. El prompt debe terminar en el nombre de la carpeta y la rama <code>(main)</code>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/07-git-bash-carpeta.png" alt="Explorador de archivos con la carpeta kanban-backend y Git Bash abierto sobre la rama main" loading="lazy"></button><figcaption>Git Bash abierto en <code>kanban-backend</code>, rama <code>main</code>.</figcaption></figure>
+
+  <h3>4.2 Ver qué cambió</h3>
+  <pre><button class="copy" type="button">Copiar</button><code>git status</code></pre>
+  <p>Deben aparecer exactamente cuatro archivos: <code>pom.xml</code> y <code>application.yml</code> como <em>modified</em>, y <code>.dockerignore</code> y <code>Dockerfile</code> como <em>untracked</em>. Si aparece algo más, no lo agregues.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/08-git-status.png" alt="Salida de git status con pom.xml y application.yml modificados y Dockerfile y .dockerignore sin seguimiento" loading="lazy"></button><figcaption>Resultado de <code>git status</code>.</figcaption></figure>
+
+  <h3>4.3 Agregar los archivos y crear el commit</h3>
+  <pre><button class="copy" type="button">Copiar</button><code>git add Dockerfile .dockerignore pom.xml src/main/resources/application.yml
+git commit -m "Preparar despliegue en Render"</code></pre>
+  <p>Se agregan solo esos cuatro archivos, en vez de <code>git add .</code>, para no subir nada por accidente. Los avisos <em>LF will be replaced by CRLF</em> son normales en Windows y no afectan el resultado. El commit debe decir <em>4 files changed</em>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/09-git-commit.png" alt="Salida de git add y git commit con 4 files changed" loading="lazy"></button><figcaption>Commit creado: 4 archivos cambiados.</figcaption></figure>
+
+  <h3>4.4 Subir a GitHub</h3>
+  <pre><button class="copy" type="button">Copiar</button><code>git push origin main</code></pre>
+  <p>Si es la primera vez en el equipo, Git abre el navegador para iniciar sesión en GitHub. Al terminar, la última línea muestra <code>main -&gt; main</code>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/10-git-push.png" alt="Salida de git push con la línea main -> main" loading="lazy"></button><figcaption>Push correcto a <code>cbarralesp/kanban_backend</code>.</figcaption></figure>
+
+  <h3>4.5 Comprobar en GitHub</h3>
+  <p>Abre el repositorio en github.com y confirma que <code>Dockerfile</code> y <code>.dockerignore</code> aparecen en la raíz, junto a <code>pom.xml</code>.</p>
+  <div class="note"><strong>Dato útil</strong>Los <code>.gitignore</code> ya excluyen <code>target/</code> y <code>logs/</code>. Es correcto: el jar no se sube, Render lo compila.</div>
+  <div class="note warn"><strong>Si algo falla</strong><em>Author identity unknown</em>: configura <code>git config --global user.name "Tu Nombre"</code> y <code>git config --global user.email "tu@correo.com"</code>, y repite el commit. <em>rejected … fetch first</em>: el repositorio tiene cambios que no tienes; no fuerces el push y revisa antes.</div>
+</section>
+
+<section class="block" id="p5">
+  <div class="step-h"><span class="n">5</span><h2>Crear el Web Service en Render</h2></div>
+  <p>Con el código en GitHub y la base de datos lista, ya puedes crear el servicio.</p>
+
+  <h3>5.1 Nuevo Web Service</h3>
+  <p>Entra a <a href="https://dashboard.render.com" target="_blank" rel="noopener">dashboard.render.com</a>, pulsa <strong>New</strong> (arriba a la derecha) y elige <strong>Web Service</strong>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/22-render-panel.png" alt="Panel de Render con el botón New resaltado" loading="lazy"></button><figcaption>Panel de Render: botón <strong>New</strong>.</figcaption></figure>
+
+  <h3>5.2 Elegir el repositorio</h3>
+  <p>En <strong>Source Code</strong> hay tres pestañas. Lo recomendado es <strong>Git Provider</strong>: conectas tu cuenta de GitHub, autorizas solo el repositorio <code>kanban_backend</code> y Render redespliega solo con cada <code>git push</code>.</p>
+  <p>Si el repositorio es <strong>público</strong>, también puedes usar <strong>Public Git Repository</strong> y pegar su dirección. Es lo que muestra esta captura. Funciona, pero Render avisa que el auto-deploy solo está disponible con Blueprints: cada cambio habría que desplegarlo a mano con <em>Manual Deploy</em>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/23-render-repo-publico.png" alt="New Web Service con la pestaña Public Git Repository y la dirección del repositorio" loading="lazy"></button><figcaption>Opción <em>Public Git Repository</em> con la dirección de <code>kanban_backend</code>. Pulsa <strong>Connect</strong>.</figcaption></figure>
+  <p>Render detecta el <code>Dockerfile</code> y rellena los campos: <em>«It looks like you're using Docker»</em>.</p>
+
+  <h3>5.3 Nombre, lenguaje, rama y región</h3>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/24-render-nombre.png" alt="Formulario con el repositorio, el nombre y el proyecto" loading="lazy"></button><figcaption>Repositorio, nombre del servicio y proyecto.</figcaption></figure>
+  <div class="tw"><table>
+    <thead><tr><th>Campo</th><th>Qué poner</th></tr></thead>
+    <tbody>
+      <tr><td>Name</td><td><code>kanban-backend</code>. Mejor con guion: el nombre forma parte de la URL pública. En este ejemplo se dejó <code>kanban_backend</code>.</td></tr>
+      <tr><td>Project</td><td>Opcional. Aquí <em>My project / Production</em>.</td></tr>
+      <tr><td>Language</td><td><code>Docker</code> (lo detecta solo)</td></tr>
+      <tr><td>Branch</td><td><code>main</code></td></tr>
+      <tr><td>Region</td><td>La que ofrezca Render. Aquí solo aparece <em>Oregon</em>, porque ya hay otro servicio ahí. La base está en <code>us-east-1</code> (Virginia); la distancia añade algo de latencia, aceptable para clases.</td></tr>
+      <tr><td>Root Directory</td><td>Vacío (el <code>Dockerfile</code> está en la raíz del repo)</td></tr>
+    </tbody>
+  </table></div>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/25-render-region.png" alt="Campos Branch main, Region Oregon y Root Directory vacío" loading="lazy"></button><figcaption>Rama <code>main</code>, región y Root Directory vacío.</figcaption></figure>
+
+  <h3>5.4 Elegir el plan Free</h3>
+  <p>Baja hasta <strong>Compute</strong>. Render deja seleccionado por defecto un plan de pago (<strong>$7 / month</strong>, visible junto al botón <em>Deploy web service</em>). Elige <strong>$0 / month · 0.1 CPU · 512 MB RAM · Free</strong> y comprueba que el precio inferior diga <strong>$0 / month</strong>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/26-render-free.png" alt="Compute con el plan Free de 0 dólares al mes seleccionado" loading="lazy"></button><figcaption>Plan <strong>Free</strong> seleccionado. Las instancias gratuitas se apagan tras un tiempo sin uso.</figcaption></figure>
+  <div class="note warn"><strong>Revisa el precio</strong>Si el botón inferior muestra $7 / month o más, todavía no elegiste el plan Free.</div>
+
+  <h3>5.5 Variables de entorno</h3>
+  <p>Más abajo está la sección <strong>Environment Variables</strong>. Con <strong>Add Environment Variable</strong> crea una fila por cada variable.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/27-render-variables-vacio.png" alt="Sección Environment Variables vacía con el botón Add Environment Variable y el desplegable Advanced" loading="lazy"></button><figcaption>Sección de variables de entorno, todavía vacía.</figcaption></figure>
+  <div class="tw"><table>
+    <thead><tr><th>KEY</th><th>VALUE</th></tr></thead>
+    <tbody>
+      <tr><td>DB_HOST</td><td><code>aws-1-us-east-1.pooler.supabase.com</code></td></tr>
+      <tr><td>DB_PORT</td><td><code>5432</code></td></tr>
+      <tr><td>DB_NAME</td><td><code>postgres</code></td></tr>
+      <tr><td>DB_USER</td><td><code>postgres.&lt;ref-del-proyecto&gt;</code></td></tr>
+      <tr><td>DB_PASSWORD</td><td>La contraseña real de Supabase</td></tr>
+      <tr><td>DB_SSL_MODE</td><td><code>require</code></td></tr>
+      <tr><td>CORS_ORIGINS</td><td><code>http://localhost:4200</code> por ahora; luego la URL del front</td></tr>
+    </tbody>
+  </table></div>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/28-render-variables.png" alt="Las siete variables de entorno completadas" loading="lazy"></button><figcaption>Variables completadas. La contraseña de esta captura es solo un ejemplo.</figcaption></figure>
+  <div class="note warn"><strong>Seguridad</strong>Escribe la contraseña real solo en este campo y oculta su valor con el ícono del ojo antes de tomar cualquier captura. Una contraseña falsa hace que la aplicación no pueda conectarse a la base. Cuida que ningún valor empiece con espacios y que el puerto sea <code>5432</code> (Session pooler), no <code>6543</code>.</div>
+  <div class="note"><strong>Opcional</strong>El plan Free tiene solo 512 MB de RAM. Si el servicio se cae por memoria, agrega la variable <code>JAVA_TOOL_OPTIONS</code> con el valor <code>-XX:MaxRAMPercentage=70</code>.</div>
+
+  <h3>5.6 Advanced</h3>
+  <p>Abre el desplegable <strong>Advanced</strong> y revisa:</p>
+  <ul class="l">
+    <li><strong>Health Check Path:</strong> <code>/actuator/health</code></li>
+    <li><strong>Dockerfile Path:</strong> <code>./Dockerfile</code></li>
+    <li><strong>Docker Build Context Directory:</strong> <code>.</code></li>
+  </ul>
+
+  <h3>5.7 Desplegar</h3>
+  <p>Con todo revisado pulsa <strong>Deploy web service</strong>.</p>
+</section>
+
+<section class="block" id="p6">
+  <div class="step-h"><span class="n">6</span><h2>Seguir el despliegue y comprobar el resultado</h2></div>
+  <p>Render abre la pantalla del <em>deploy</em>. El estado pasa por <strong>Building</strong> y luego <strong>In progress</strong>. El título es el mensaje de tu último commit y <em>Source</em> es su código (aquí <code>84834b1</code>, el que subiste a GitHub).</p>
+
+  <h3>6.1 Build: Render construye la imagen</h3>
+  <p>En <strong>Logs</strong> ves lo mismo que ejecuta tu <code>Dockerfile</code>: descarga las imágenes base, copia el proyecto, compila con Maven y arma la imagen.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/29-render-deploy-inicio.png" alt="Pantalla del deploy en estado Building con los primeros logs de Docker" loading="lazy"></button><figcaption>Inicio del build: Render descarga las imágenes base.</figcaption></figure>
+  <p>Cuando aparece <strong>BUILD SUCCESS</strong> y <code>COPY --from=build … kanban-backend-*.jar app.jar</code>, el jar quedó dentro de la imagen. Después Render la sube a su registro (<em>pushing layers</em>).</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/30-render-build-ok.png" alt="Logs con BUILD SUCCESS y la imagen exportándose" loading="lazy"></button><figcaption>Build correcto: la imagen se exporta y se sube al registro.</figcaption></figure>
+
+  <h3>6.2 Deploying: arranca la aplicación</h3>
+  <p>Aparece <strong>==&gt; Deploying…</strong>. Ahora Render ejecuta el contenedor y espera a que responda. En el plan Free esto puede tardar <strong>entre 1 y 3 minutos</strong>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/31-render-deploying.png" alt="Logs con el mensaje Deploying y el estado In progress" loading="lazy"></button><figcaption>Fase <em>Deploying</em>: no canceles, solo espera.</figcaption></figure>
+  <div class="note warn"><strong>Sé paciente</strong>No pulses <em>Cancel</em>. Espera a que el estado cambie a <strong>Live</strong>. Mientras tanto, en los logs deben aparecer las migraciones de Flyway y la línea <code>Started KanbanApplication</code>.</div>
+  <p>Cuando termina, el estado pasa a <strong>Deploy succeeded | Live</strong> (en verde) y la duración total queda registrada (aquí, unos 4 minutos). En los logs aparece <code>Your service is live</code> y la URL pública del servicio.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/43-render-live.png" alt="Deploy en Render con el estado Deploy succeeded Live y la duración de 4 minutos 22 segundos" loading="lazy"></button><figcaption>Despliegue terminado: <em>Deploy succeeded | Live</em>.</figcaption></figure>
+
+  <h3>6.3 Comprobar que funciona</h3>
+  <p>Cuando el estado sea <strong>Live</strong>, la URL pública del servicio aparece en los logs (<em>Available at your primary URL</em>) y bajo el nombre del servicio. Ten en cuenta que Render puede añadir un sufijo al nombre y cambiar el guion bajo por un guion, por ejemplo <code>https://kanban-backend-hbmc.onrender.com</code>.</p>
+
+  <h4>El servicio se despierta</h4>
+  <p>Si el servicio llevaba un rato sin recibir visitas, la primera petición muestra una pantalla de espera, <em>«Service waking up…»</em>, y tarda entre 30 segundos y un minuto. Es el comportamiento normal del plan Free. Cuando termina, la página carga sola.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/32-render-despertando.png" alt="Pantalla de Render con el mensaje Service waking up y Application loading" loading="lazy"></button><figcaption>El plan Free apaga el servicio por inactividad; la primera visita lo despierta.</figcaption></figure>
+
+  <h4>La ruta raíz devuelve un error 500</h4>
+  <p>Si abres solo la dirección, sin ninguna ruta, verás un JSON con <code>"status":500</code> y el mensaje «Ocurrió un error inesperado». <strong>Es lo esperado</strong>: la API no tiene nada en <code>/</code>. Que responda en el formato de la aplicación demuestra que el backend está funcionando.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/33-render-raiz-500.png" alt="Respuesta JSON con status 500 al abrir la dirección raíz del servicio" loading="lazy"></button><figcaption>La raíz <code>/</code> no existe en la API: el error 500 es normal. Usa las rutas de la API.</figcaption></figure>
+
+  <h4>Probar la API</h4>
+  <p>Añade la ruta de la API a la dirección del servicio:</p>
+  <pre><button class="copy" type="button">Copiar</button><code>https://&lt;tu-servicio&gt;.onrender.com/api/tareas</code></pre>
+  <p>Debe responder con la lista de tareas. No sale vacía porque la migración <code>V2__datos_iniciales.sql</code> inserta tres tareas de ejemplo. Verlas es la prueba de que se cumplió toda la cadena: Render ejecutó tu código, Flyway creó las tablas en Supabase y la API leyó los datos desde allí.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/34-render-api-tareas.png" alt="Respuesta JSON de la ruta api/tareas con tres tareas de ejemplo" loading="lazy"></button><figcaption><code>/api/tareas</code> devuelve las tres tareas de ejemplo guardadas en Supabase.</figcaption></figure>
+
+  <h4>Ver los datos en Supabase</h4>
+  <p>La prueba más clara de que backend y base están conectados es ver el resultado dentro de Supabase. En el panel del proyecto abre <strong>Table Editor</strong> (segundo ícono de la barra lateral). En el esquema <code>public</code> aparecen dos tablas que creó Flyway al arrancar el backend:</p>
+  <ul class="l">
+    <li><code>tarea</code>: la tabla de tu aplicación.</li>
+    <li><code>flyway_schema_history</code>: el registro de migraciones aplicadas. Muestra <code>V1__crear_tabla_tarea.sql</code> y <code>V2__datos_iniciales.sql</code>.</li>
+  </ul>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/39-supabase-table-editor.png" alt="Table Editor de Supabase con las tablas flyway_schema_history y tarea, mostrando las migraciones V1 y V2" loading="lazy"></button><figcaption>Table Editor: <code>flyway_schema_history</code> lista las dos migraciones aplicadas.</figcaption></figure>
+  <p>Para consultar los datos con SQL, abre el <strong>SQL Editor</strong> (tercer ícono), escribe la consulta y pulsa <strong>Run</strong>:</p>
+  <pre><button class="copy" type="button">Copiar</button><code>select * from tarea;</code></pre>
+  <p>El resultado muestra las tres tareas de ejemplo, las mismas que devolvió la API y que ahora ve el tablero.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/40-supabase-sql-editor.png" alt="SQL Editor de Supabase con la consulta select * from tarea y tres filas de resultado" loading="lazy"></button><figcaption>SQL Editor: la consulta devuelve las 3 filas de la tabla <code>tarea</code>.</figcaption></figure>
+  <div class="note"><strong>Dato útil</strong>En la página principal del proyecto, la tarjeta <em>Primary Database</em> muestra cuántas conexiones hay abiertas (por ejemplo <code>6/60 conns</code>). Esas conexiones las abre el backend de Render. En el mismo panel, <em>Last migration</em> dice «No migrations» porque se refiere a las migraciones propias de Supabase, no a las de Flyway.</div>
+
+  <h4>Health check</h4>
+  <div class="pend"><strong>Pendiente de captura.</strong> <code>/actuator/health</code> debe responder <code>{"status":"UP"}</code>.</div>
+
+  <h3>Si falla</h3>
+  <ul class="l">
+    <li><em>password authentication failed</em>: <code>DB_PASSWORD</code> no es la contraseña real de Supabase.</li>
+    <li><em>Connection refused</em> o <em>timeout</em>: revisa <code>DB_HOST</code> y que el puerto sea <code>5432</code>.</li>
+    <li>El proceso se cae sin error claro: probablemente falta memoria; agrega <code>JAVA_TOOL_OPTIONS</code> (ver 5.5).</li>
+  </ul>
+</section>
+
+<div class="part" id="parte3">
+  <span class="pn">Parte 3</span>
+  <h2 class="pt">Frontend</h2>
+  <p>Angular · GitHub · Vercel. Se publica el front y se conecta con el backend de Render.</p>
+</div>
+<section class="block" id="f1">
+  <div class="step-h"><span class="n">7</span><h2>Iniciar sesión en Vercel</h2></div>
+  <p>Entra a <a href="https://vercel.com/login" target="_blank" rel="noopener">vercel.com/login</a> y elige tu método. Vercel marca con <em>Last Used</em> el que usaste la última vez.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-01-login.png" alt="Pantalla Log in to Vercel con opciones de correo, Google, GitHub y ChatGPT" loading="lazy"></button><figcaption>Pantalla de inicio de sesión de Vercel.</figcaption></figure>
+
+  <h3>Si tu cuenta tiene verificación en dos pasos</h3>
+  <p>Vercel pide el código de 6 dígitos de tu app de autenticación. Escríbelo y pulsa <strong>Verify</strong>. Si perdiste el acceso, usa <em>Use a Recovery Code Instead</em>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-02-verificacion.png" alt="Pantalla Open Your Authenticator App con seis casillas para el código" loading="lazy"></button><figcaption>Verificación en dos pasos (2FA).</figcaption></figure>
+  <div class="note"><strong>Seguridad</strong>No compartas capturas con la dirección completa de esta pantalla: la URL lleva un token temporal.</div>
+</section>
+
+<section class="block" id="f2">
+  <div class="step-h"><span class="n">8</span><h2>Crear un proyecto nuevo</h2></div>
+  <p>En el panel principal pulsa <strong>Create New</strong> (arriba a la derecha) y luego <strong>Project</strong>. El menú también ofrece Domain, Store, Integration y otras opciones que no necesitas ahora.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-03-dashboard.png" alt="Panel de Vercel con el menú Create New desplegado" loading="lazy"></button><figcaption>Panel del equipo: Create New → Project.</figcaption></figure>
+  <p>Se abre <strong>Import Git Repository</strong>, con la lista de repositorios de tu cuenta de GitHub. Cada uno tiene un botón <strong>Import</strong>.</p>
+</section>
+
+<section class="block" id="f3">
+  <div class="step-h"><span class="n">9</span><h2>Dar acceso al repositorio</h2></div>
   <p>Si tu repositorio no aparece en la lista, Vercel todavía no tiene permiso para verlo. Es lo más común con repos recién creados.</p>
   <ol class="l">
     <li>Debajo de la lista pulsa <strong>Adjust GitHub App Permissions</strong>.</li>
   </ol>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/04-importar-repo.png" alt="Lista de importación con el enlace Adjust GitHub App Permissions resaltado" loading="lazy"></button><figcaption>El enlace queda justo bajo la lista de repositorios.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-04-importar-repo.png" alt="Lista de importación con el enlace Adjust GitHub App Permissions resaltado" loading="lazy"></button><figcaption>El enlace queda justo bajo la lista de repositorios.</figcaption></figure>
   <ol class="l" start="2">
     <li>GitHub abre la configuración de la app de Vercel (<em>Settings → Applications</em>).</li>
   </ol>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/05-github-app.png" alt="Página de la app de Vercel instalada en GitHub" loading="lazy"></button><figcaption>Configuración de la app instalada en GitHub.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-05-github-app.png" alt="Página de la app de Vercel instalada en GitHub" loading="lazy"></button><figcaption>Configuración de la app instalada en GitHub.</figcaption></figure>
   <ol class="l" start="3">
     <li>Baja hasta <strong>Repository access</strong>. Deja marcado <strong>Only select repositories</strong>, abre <em>Select repositories</em> y agrega el repo nuevo.</li>
     <li>Pulsa <strong>Save</strong>.</li>
   </ol>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/06-acceso-repo.png" alt="Repository access con kanban-frontend agregado a los repositorios seleccionados" loading="lazy"></button><figcaption>Aquí quedan autorizados <code>kanban-frontend</code> y el otro repositorio de la cuenta.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-06-acceso-repo.png" alt="Repository access con kanban-frontend agregado a los repositorios seleccionados" loading="lazy"></button><figcaption>Aquí quedan autorizados <code>kanban-frontend</code> y el otro repositorio de la cuenta.</figcaption></figure>
   <p>Vuelve a Vercel y recarga la página <em>New Project</em>. Ahora el repositorio aparece en la lista. Pulsa <strong>Import</strong>.</p>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/07-repo-listo.png" alt="Lista de importación con kanban-frontend y su botón Import" loading="lazy"></button><figcaption>Repositorio visible y listo para importar.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-07-repo-listo.png" alt="Lista de importación con kanban-frontend y su botón Import" loading="lazy"></button><figcaption>Repositorio visible y listo para importar.</figcaption></figure>
   <div class="note"><strong>Dato útil</strong>Elegir «Only select repositories» es lo más seguro: Vercel solo ve los repos que tú autorizas.</div>
 </section>
 
-<section class="block" id="p4">
-  <div class="step-h"><span class="n">4</span><h2>Configurar el proyecto</h2></div>
+<section class="block" id="f4">
+  <div class="step-h"><span class="n">10</span><h2>Configurar el proyecto</h2></div>
   <p>En la pantalla <strong>New Project</strong> Vercel detecta Angular y rellena casi todo.</p>
   <div class="tw"><table>
     <thead><tr><th>Campo</th><th>Qué poner</th></tr></thead>
@@ -201,11 +565,11 @@ npm run build</code></pre>
       <tr><td>Application Preset</td><td><code>Angular</code>. Si dice «Other», selecciónalo a mano.</td></tr>
     </tbody>
   </table></div>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/08-configurar.png" alt="Pantalla New Project con equipo, nombre, directorio raíz y preset Angular" loading="lazy"></button><figcaption>Importando <code>cbarralesp/kanban-frontend</code>, rama <code>main</code>.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-08-configurar.png" alt="Pantalla New Project con equipo, nombre, directorio raíz y preset Angular" loading="lazy"></button><figcaption>Importando <code>cbarralesp/kanban-frontend</code>, rama <code>main</code>.</figcaption></figure>
 
   <h3>Build and Output Settings</h3>
   <p>Despliega la sección para revisarla. Los textos en gris son valores por defecto de Vercel. <strong>Déjalos vacíos</strong>: el preset de Angular lee tu <code>angular.json</code> y deduce la carpeta de salida.</p>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/09-build-env.png" alt="Secciones Build and Output Settings y Environment Variables desplegadas" loading="lazy"></button><figcaption>Build Command, Output Directory, Install Command y variables de entorno.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-09-build-env.png" alt="Secciones Build and Output Settings y Environment Variables desplegadas" loading="lazy"></button><figcaption>Build Command, Output Directory, Install Command y variables de entorno.</figcaption></figure>
   <div class="tw"><table>
     <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
     <tbody>
@@ -217,8 +581,8 @@ npm run build</code></pre>
   </table></div>
 </section>
 
-<section class="block" id="p5">
-  <div class="step-h"><span class="n">5</span><h2>Pulsar Deploy</h2></div>
+<section class="block" id="f5">
+  <div class="step-h"><span class="n">11</span><h2>Pulsar Deploy</h2></div>
   <p>Con todo revisado, pulsa el botón negro <strong>Deploy</strong>. Si Vercel te pide confirmar tu identidad otra vez (reautenticación), introduce el código de tu app de autenticación y continúa.</p>
   <p>Aparece la pantalla <strong>Deployment</strong> con el progreso:</p>
   <ul class="l">
@@ -226,67 +590,68 @@ npm run build</code></pre>
     <li><strong>Deployment Summary</strong> y <strong>Deployment Checks:</strong> se completan solos.</li>
     <li><strong>Assigning Custom Domains:</strong> asigna la URL <code>.vercel.app</code>.</li>
   </ul>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/10-desplegando.png" alt="Pantalla Deployment con los logs de build en curso" loading="lazy"></button><figcaption>Build en curso. No pulses Cancel Deployment.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-10-desplegando.png" alt="Pantalla Deployment con los logs de build en curso" loading="lazy"></button><figcaption>Build en curso. No pulses Cancel Deployment.</figcaption></figure>
 </section>
 
-<section class="block" id="p6">
-  <div class="step-h"><span class="n">6</span><h2>Comprobar el resultado</h2></div>
+<section class="block" id="f6">
+  <div class="step-h"><span class="n">12</span><h2>Comprobar el resultado</h2></div>
   <p>Al terminar aparece <strong>Deployed to Production</strong>, con una miniatura del sitio y el tiempo total. Aquí fueron 26 segundos.</p>
   <ul class="l">
     <li><strong>Visit</strong> abre el sitio en su URL pública.</li>
     <li><strong>Continue to Project</strong> lleva al panel del proyecto (deployments, dominios, ajustes).</li>
     <li>El icono junto a Visit copia la URL.</li>
   </ul>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/11-exito.png" alt="Pantalla Deployed to Production con la miniatura del tablero Kanban" loading="lazy"></button><figcaption>Despliegue exitoso del tablero Kanban.</figcaption></figure>
-  <div class="note warn"><strong>Ojo con esta captura</strong>La miniatura muestra un banner rojo («Ocurrió un error inesperado») y las columnas vacías. El despliegue funcionó; lo que falla es la conexión del front con su backend. Mira «El sitio abre, pero no carga datos» en la sección siguiente.</div>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-11-exito.png" alt="Pantalla Deployed to Production con la miniatura del tablero Kanban" loading="lazy"></button><figcaption>Despliegue exitoso del tablero Kanban.</figcaption></figure>
+  <div class="note warn"><strong>Ojo con esta captura</strong>La miniatura muestra un banner rojo («Ocurrió un error inesperado») y las columnas vacías. El despliegue funcionó; lo que falla es la conexión del front con su backend. Se resuelve en el paso 13.</div>
 </section>
 
-<section class="block" id="problemas">
-  <h2>Problemas comunes</h2>
-  <details>
-    <summary>El sitio abre en blanco o responde 404</summary>
-    <div class="in">
-      <p>Casi siempre es la carpeta de salida. En Vercel entra al proyecto → <em>Settings</em> → <em>Build and Output Settings</em>, activa el lápiz de <strong>Output Directory</strong> y escribe la ruta real:</p>
-      <pre><button class="copy" type="button">Copiar</button><code>dist/&lt;nombre-del-proyecto&gt;/browser</code></pre>
-      <p>El nombre sale de la clave <code>projects</code> en tu <code>angular.json</code>. Guarda y vuelve a desplegar.</p>
-    </div>
-  </details>
-  <details>
-    <summary>Al recargar una ruta (por ejemplo /board) sale 404</summary>
-    <div class="in">
-      <p>Angular maneja las rutas en el navegador, pero el servidor no las conoce. Crea un archivo <code>vercel.json</code> en la raíz del repositorio:</p>
-      <pre><button class="copy" type="button">Copiar</button><code>{ "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }</code></pre>
-      <p>Haz commit y push a <code>main</code>. Vercel redespliega solo.</p>
-    </div>
-  </details>
-  <details>
-    <summary>El sitio abre, pero no carga datos</summary>
-    <div class="in">
-      <p>Si tu front llama a un API en <code>http://localhost:8080</code>, esa dirección solo existe en tu equipo. Desde Vercel nadie puede llegar a ella. Tienes dos caminos:</p>
-      <ul class="l">
-        <li>Desplegar el backend en un servicio público y cambiar la URL en <code>src/environments/environment.ts</code>.</li>
-        <li>Si el API ya es público, solo cambiar esa URL, hacer commit y push.</li>
-      </ul>
-      <p>El API público debe permitir peticiones desde tu dominio <code>.vercel.app</code> (CORS).</p>
-    </div>
-  </details>
-  <details>
-    <summary>El build falla</summary>
-    <div class="in">
-      <p>Abre <strong>Build Logs</strong> y lee las últimas líneas. Causas habituales:</p>
-      <ul class="l">
-        <li>El proyecto no compila en tu equipo con <code>npm run build</code>. Corrígelo primero ahí.</li>
-        <li>Un archivo escrito con otra mayúscula o minúscula en un import. Linux distingue entre <code>Board.ts</code> y <code>board.ts</code>; Windows no.</li>
-        <li>Falta una dependencia en <code>package.json</code> que solo tenías instalada de forma global.</li>
-      </ul>
-    </div>
-  </details>
-  <details>
-    <summary>Mi repositorio no aparece en la lista</summary>
-    <div class="in">
-      <p>Repite el paso 3: <em>Adjust GitHub App Permissions</em>, agrega el repo y guarda. Si el repo es de una organización de GitHub, el plan Hobby no lo permite.</p>
-    </div>
-  </details>
+<section class="block" id="f7">
+  <div class="step-h"><span class="n">13</span><h2>Conectar el front (Vercel) con el backend</h2></div>
+  <p>Este paso supone que el front Angular ya está desplegado en Vercel (pasos 7 a 12). Falta que hable con el backend de Render.</p>
+
+  <h3>13.1 Por qué el front muestra un error</h3>
+  <p>El front llama a una ruta <strong>relativa</strong>, <code>/api/tareas</code>. En tu equipo, el archivo <code>proxy.conf.json</code> la reenvía a <code>http://localhost:8083</code>. En Vercel ese proxy no existe, así que el sitio abre pero no carga datos: aparece el banner rojo «Ocurrió un error inesperado» y las columnas vacías.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/35-vercel-front-error.png" alt="Deployment en Vercel cuyo tablero muestra un banner de error y las columnas sin tareas" loading="lazy"></button><figcaption>El front desplegado en Vercel, todavía sin backend: banner de error y columnas vacías.</figcaption></figure>
+
+  <h3>13.2 Crear vercel.json</h3>
+  <p>En la raíz del proyecto del front (junto a <code>package.json</code>) crea el archivo <code>vercel.json</code>. Hace en Vercel lo mismo que el proxy local: reenvía las llamadas a <code>/api</code> al backend de Render.</p>
+  <pre><button class="copy" type="button">Copiar</button><code>{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://&lt;tu-servicio&gt;.onrender.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}</code></pre>
+  <ul class="l">
+    <li><strong>Primera regla:</strong> todo lo que empiece con <code>/api</code> va al backend. Cambia <code>&lt;tu-servicio&gt;</code> por la dirección real de tu servicio en Render (aquí <code>kanban-backend-hbmc</code>).</li>
+    <li><strong>Segunda regla:</strong> cualquier otra ruta de Angular sirve <code>index.html</code>, y evita el 404 al recargar la página.</li>
+    <li><strong>No hay que cambiar código Angular.</strong> Tampoco hace falta tocar CORS: para el navegador la llamada va al mismo dominio, y es Vercel quien consulta a Render.</li>
+  </ul>
+
+  <h3>13.3 Subir el cambio a GitHub</h3>
+  <p>Abre Git Bash en la carpeta del front. <code>git status</code> debe mostrar solo <code>vercel.json</code> como archivo nuevo.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/36-git-status-front.png" alt="Git Bash en la carpeta kanban-frontend con git status mostrando vercel.json sin seguimiento" loading="lazy"></button><figcaption><code>git status</code>: solo <code>vercel.json</code> está sin seguimiento.</figcaption></figure>
+  <pre><button class="copy" type="button">Copiar</button><code>git add vercel.json
+git commit -m "Conectar el front con el backend en Render"
+git push origin main</code></pre>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/37-git-commit-front.png" alt="Salida de git add, git commit y git push con 1 file changed" loading="lazy"></button><figcaption>Commit con <em>1 file changed</em>, y a continuación el <code>git push</code>.</figcaption></figure>
+
+  <h3>13.4 Vercel redespliega solo</h3>
+  <p><strong>No hay que hacer un deploy manual.</strong> Como el proyecto está conectado a GitHub, cada <code>git push</code> a <code>main</code> genera un despliegue nuevo en Vercel, en unos 20 a 30 segundos. Lo verás en la pestaña <strong>Deployments</strong> con el mensaje de tu commit, primero en <em>Building</em> y al terminar en <em>Ready</em>.</p>
+
+  <h3>13.5 Comprobar</h3>
+  <ol class="l">
+    <li>Abre la URL de tu proyecto en Vercel (por ejemplo <code>https://kanban-frontend-topaz.vercel.app</code>). Debe mostrar el tablero con las tareas, sin el banner rojo.</li>
+    <li>Prueba también <code>/api/tareas</code> en esa misma dirección: debe devolver el JSON del backend.</li>
+  </ol>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/38-tablero-funcionando.png" alt="Tablero Kanban en Vercel con tres tareas repartidas en las columnas Por hacer, En curso y Hecha" loading="lazy"></button><figcaption>El front en Vercel, conectado al backend de Render y a la base en Supabase: las tres tareas de ejemplo aparecen en sus columnas.</figcaption></figure>
+  <p>Estas tareas no vienen del front: pasan por toda la cadena <strong>Vercel → Render → Supabase</strong>. Para comprobar que también se guardan, crea una tarea con <strong>+ Nueva tarea</strong>, recarga la página y verifica que sigue ahí. Después puedes verla en el <em>Table Editor</em> de Supabase.</p>
+  <div class="note warn"><strong>Si tarda o falla</strong>Si el backend de Render estaba dormido, la primera carga puede tardar hasta un minuto o mostrar un error. Espera y recarga. Es el comportamiento normal del plan Free.</div>
 </section>
 
 <section class="block" id="despues">
@@ -299,22 +664,81 @@ npm run build</code></pre>
   </ul>
 </section>
 
-<section class="block" id="limites">
-  <h2>Límites del plan gratis</h2>
-  <p>Según la <a href="https://vercel.com/docs/limits" target="_blank" rel="noopener">documentación oficial de Vercel</a> (revisada en noviembre de 2026):</p>
+<section class="block" id="heidi">
+  <h2>Anexo: conectarse a la base con HeidiSQL</h2>
+  <p>Además del <em>Table Editor</em> de Supabase, puedes abrir la base desde tu equipo con un cliente como <strong>HeidiSQL</strong> (o DBeaver). Se conecta directamente a PostgreSQL con los datos del <strong>Session pooler</strong> del paso 1.6.</p>
+  <div class="note"><strong>No hay una IP fija</strong>Para conectarte usas el <strong>nombre del host</strong> (<code>aws-1-us-east-1.pooler.supabase.com</code>), no una dirección IP. Las IP detrás de ese nombre pueden cambiar, y por eso Supabase entrega un nombre. Tampoco hace falta autorizar tu IP: por defecto la base acepta conexiones con usuario y contraseña.</div>
+
+  <h3>1. Crear la sesión</h3>
+  <p>En HeidiSQL abre el <strong>Administrador de sesiones</strong> y pulsa <strong>Nueva</strong>. Completa la pestaña <strong>Ajustes</strong>:</p>
   <div class="tw"><table>
-    <thead><tr><th></th><th>Hobby</th><th>Pro</th></tr></thead>
+    <thead><tr><th>Campo en HeidiSQL</th><th>Valor</th></tr></thead>
     <tbody>
-      <tr><td>Proyectos</td><td>200</td><td>Ilimitados</td></tr>
-      <tr><td>Despliegues por día</td><td>100</td><td>6000</td></tr>
-      <tr><td>Proyectos por repo de Git</td><td>25</td><td>150</td></tr>
+      <tr><td>Tipo de red</td><td><code>PostgreSQL (TCP/IP)</code></td></tr>
+      <tr><td>Nombre de host / IP</td><td><code>aws-1-us-east-1.pooler.supabase.com</code></td></tr>
+      <tr><td>Usuario</td><td><code>postgres.&lt;ref-del-proyecto&gt;</code></td></tr>
+      <tr><td>Contraseña</td><td>La de tu proyecto en Supabase</td></tr>
+      <tr><td>Puerto</td><td><code>5432</code></td></tr>
+      <tr><td>Base de datos</td><td><code>postgres</code> (escríbela: el campo trae solo un texto de ayuda)</td></tr>
     </tbody>
   </table></div>
-  <p>El plan Hobby no permite conectar repositorios que pertenezcan a una organización de GitHub: el repo debe estar en tu cuenta personal.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/41-heidisql-sesion.png" alt="Administrador de sesiones de HeidiSQL con tipo PostgreSQL, host del pooler de Supabase, usuario, contraseña oculta, puerto 5432 y base postgres" loading="lazy"></button><figcaption>Sesión de HeidiSQL con los datos del Session pooler. La contraseña queda oculta.</figcaption></figure>
+  <div class="note warn"><strong>Usa el Session pooler</strong>No uses el host directo <code>db.&lt;ref&gt;.supabase.co</code>: solo funciona por IPv6 y desde muchas redes no conecta. Tampoco uses el puerto <code>6543</code> (Transaction pooler).</div>
+
+  <h3>2. Activar SSL y guardar</h3>
+  <ol class="l">
+    <li>Abre la pestaña <strong>SSL</strong> y marca <strong>Usar SSL</strong>. Supabase exige conexión segura. No hace falta cargar certificados.</li>
+    <li>Pulsa <strong>Guardar</strong>. Mientras la sesión tenga un asterisco (<code>*</code>), hay cambios sin guardar y el botón <strong>Abrir</strong> puede aparecer desactivado.</li>
+    <li>Pulsa <strong>Abrir</strong>.</li>
+  </ol>
+
+  <h3>3. Ver las bases y las tablas</h3>
+  <p>Al conectar, el panel izquierdo muestra los esquemas de la base. Los de Supabase (<code>auth</code>, <code>storage</code>, <code>realtime</code>…) son internos de la plataforma. Tu aplicación vive en el esquema <strong><code>public</code></strong>: ahí están la tabla <code>tarea</code> y <code>flyway_schema_history</code>.</p>
+
+  <h3>4. Ejecutar consultas</h3>
+  <p>Abre una pestaña de consulta (<strong>Ctrl + T</strong>), escribe una consulta y ejecútala con <strong>F9</strong>. Si hay varias consultas en la pestaña, selecciona la que quieres ejecutar antes de pulsar F9.</p>
+  <p><strong>Ver todas las tareas:</strong></p>
+  <pre><button class="copy" type="button">Copiar</button><code>select * from tarea;</code></pre>
+  <p><strong>Ver algunas columnas, ordenadas:</strong></p>
+  <pre><button class="copy" type="button">Copiar</button><code>select id, titulo, estado, prioridad, fecha_limite
+from tarea
+order by id;</code></pre>
+  <p><strong>Contar tareas por estado:</strong></p>
+  <pre><button class="copy" type="button">Copiar</button><code>select estado, count(*) as total
+from tarea
+group by estado;</code></pre>
+  <p><strong>Ver las migraciones que aplicó Flyway:</strong></p>
+  <pre><button class="copy" type="button">Copiar</button><code>select installed_rank, version, description, script, success
+from flyway_schema_history
+order by installed_rank;</code></pre>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/42-heidisql-consultas.png" alt="HeidiSQL conectado a Supabase con las consultas escritas y el resultado de select * from tarea con tres filas" loading="lazy"></button><figcaption>HeidiSQL conectado: la consulta <code>select * from tarea;</code> devuelve las 3 tareas. Cada consulta abre su propia pestaña de resultados.</figcaption></figure>
+  <p>Las columnas de <code>tarea</code> son <code>id</code>, <code>titulo</code>, <code>descripcion</code>, <code>estado</code>, <code>prioridad</code>, <code>fecha_limite</code>, <code>creada_en</code> y <code>actualizada_en</code>.</p>
+  <div class="note"><strong>Prueba para el aula</strong>Crea una tarea desde el tablero de Vercel y vuelve a ejecutar <code>select * from tarea;</code>. Debe aparecer una fila más: el tablero escribe en la misma base que estás consultando.</div>
+
+  <h3>¿Entrar al servidor de Render por SSH (MobaXterm)?</h3>
+  <p>No es posible con el plan gratuito. Render lo avisa en la pantalla de creación: las instancias <em>Free</em> no soportan acceso SSH. Además, tu servicio es un contenedor Docker, no un servidor con una IP propia para entrar. Para ver qué hace la aplicación tienes estas opciones gratuitas:</p>
+  <ul class="l">
+    <li><strong>Logs</strong> del servicio en el panel de Render (en vivo con <em>Live tail</em>).</li>
+    <li><strong>Prueba local con Docker</strong> del mismo <code>Dockerfile</code>, donde sí puedes abrir una terminal dentro del contenedor.</li>
+  </ul>
+  <p>El acceso por SSH y la pestaña <strong>Shell</strong> de Render requieren un plan de pago (en el menú lateral aparecen marcados con un rayo).</p>
+
+  <h3>Dónde ver los logs de cada parte</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Qué quieres ver</th><th>Dónde</th></tr></thead>
+    <tbody>
+      <tr><td>El backend (arranque, Flyway, errores, peticiones)</td><td>Render → tu servicio → <strong>Logs</strong>, en vivo con <em>Live tail</em></td></tr>
+      <tr><td>El build y el despliegue</td><td>Render → <strong>Deploys</strong> → el deploy que te interese</td></tr>
+      <tr><td>La base de datos</td><td>Supabase → <strong>Logs</strong> (barra lateral)</td></tr>
+      <tr><td>El front</td><td>Vercel → <strong>Deployments</strong> → Logs</td></tr>
+      <tr><td>El backend en tu equipo</td><td>La consola de Eclipse</td></tr>
+    </tbody>
+  </table></div>
+  <p>El archivo <code>logs/kanban-backend.log</code> que escribe la aplicación existe dentro del contenedor, pero no se puede abrir en el plan Free y se borra en cada reinicio. Lo que Render muestra en <strong>Logs</strong> es la salida de consola.</p>
 </section>
 
 <section class="block" id="pages">
-  <h2>Publicar en GitHub Pages</h2>
+  <h2>Anexo: publicar el manual en GitHub Pages</h2>
   <p>GitHub Pages publica sitios estáticos (HTML, CSS, JavaScript e imágenes) directamente desde un repositorio, gratis y sin servidor. Sirve para documentación, portafolios y manuales como este. No ejecuta backends. Una aplicación Angular necesita compilarse antes, y para eso Vercel es más cómodo.</p>
 
   <h3>Antes de empezar</h3>
@@ -339,11 +763,11 @@ git push origin main</code></pre>
     <li>En <strong>Branch</strong> selecciona <code>main</code> y la carpeta <code>/ (root)</code>.</li>
     <li>Pulsa <strong>Save</strong>.</li>
   </ol>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/12-github-pages.png" alt="Settings, Pages con Deploy from a branch, main y / (root) antes de guardar" loading="lazy"></button><figcaption>Settings → Pages antes de guardar. El mensaje «GitHub Pages is currently disabled» indica que todavía no está activado.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-12-github-pages.png" alt="Settings, Pages con Deploy from a branch, main y / (root) antes de guardar" loading="lazy"></button><figcaption>Settings → Pages antes de guardar. El mensaje «GitHub Pages is currently disabled» indica que todavía no está activado.</figcaption></figure>
 
   <h3>Paso 4. Confirmar que se guardó</h3>
   <p>Aparece una franja azul con <em>GitHub Pages source saved</em>. Debajo, el texto cambia a <em>Your GitHub Pages site is currently being built from the main branch</em>. Eso significa que GitHub empezó a construir el sitio.</p>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/13-github-pages-guardado.png" alt="Settings, Pages con el aviso GitHub Pages source saved" loading="lazy"></button><figcaption>Configuración guardada: el sitio se está construyendo desde la rama <code>main</code>.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-13-github-pages-guardado.png" alt="Settings, Pages con el aviso GitHub Pages source saved" loading="lazy"></button><figcaption>Configuración guardada: el sitio se está construyendo desde la rama <code>main</code>.</figcaption></figure>
 
   <h3>Paso 5. Esperar y abrir el sitio</h3>
   <p>La publicación tarda de uno a dos minutos. Para seguirla tienes dos opciones:</p>
@@ -352,9 +776,9 @@ git push origin main</code></pre>
     <li>Abre la pestaña <strong>Actions</strong>. Ahí corre un proceso llamado <em>pages build and deployment</em>. Cuando queda en verde, el sitio está publicado.</li>
   </ul>
   <p>Cuando termina, arriba aparece el aviso <em>Your site is live at</em> con la dirección del sitio. Pulsa <strong>Visit site</strong> para abrirlo. El botón rojo <strong>Unpublish site</strong> retira el sitio: no lo pulses si quieres que siga publicado.</p>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/14-github-pages-publicado.png" alt="Settings, Pages con el aviso Your site is live at y los botones Visit site y Unpublish site" loading="lazy"></button><figcaption>Sitio publicado: la dirección aparece en Settings → Pages.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-14-github-pages-publicado.png" alt="Settings, Pages con el aviso Your site is live at y los botones Visit site y Unpublish site" loading="lazy"></button><figcaption>Sitio publicado: la dirección aparece en Settings → Pages.</figcaption></figure>
   <p>Al abrir la dirección ves tu <code>index.html</code> funcionando en Internet.</p>
-  <figure><button type="button" aria-label="Ampliar captura"><img src="img/15-sitio-publicado.png" alt="El manual abierto en cbarralesp.github.io/manual_despliegues" loading="lazy"></button><figcaption>El manual abierto desde su dirección pública.</figcaption></figure>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/vercel-15-sitio-publicado.png" alt="El manual abierto en cbarralesp.github.io/manual_despliegues" loading="lazy"></button><figcaption>El manual abierto desde su dirección pública.</figcaption></figure>
   <p>La dirección sigue siempre este formato:</p>
   <pre><button class="copy" type="button">Copiar</button><code>https://&lt;usuario&gt;.github.io/&lt;repositorio&gt;/</code></pre>
   <p>Por ejemplo, para el usuario <code>cbarralesp</code> y el repositorio <code>manual_despliegues</code>: <code>https://cbarralesp.github.io/manual_despliegues/</code>.</p>
@@ -380,7 +804,91 @@ git push origin main</code></pre>
     <div class="in"><p>Espera uno o dos minutos y recarga con <code>Ctrl + F5</code>. Si sigue igual, revisa la pestaña <strong>Actions</strong>: un proceso en rojo indica un error de publicación.</p></div>
   </details>
 </section>
-<footer>Manual elaborado con capturas reales de un despliegue de Angular 21 en Vercel. Los nombres de pantallas y botones están en inglés porque así los muestra Vercel.</footer>
+
+<section class="block" id="problemas">
+  <h2>Problemas comunes</h2>
+  <details>
+    <summary>El build falla: no encuentra kanban-backend-*.jar</summary>
+    <div class="in"><p>El nombre del jar en el <code>Dockerfile</code> no coincide con el <code>artifactId</code> y la <code>version</code> del <code>pom.xml</code>. Ajusta la línea <code>COPY --from=build</code>.</p></div>
+  </details>
+  <details>
+    <summary>El Dockerfile no se encuentra</summary>
+    <div class="in"><p>Verifica que se llame exactamente <code>Dockerfile</code> (sin <code>.txt</code>), que esté en la raíz del repo y que en Render el <em>Dockerfile Path</em> sea <code>./Dockerfile</code>.</p></div>
+  </details>
+  <details>
+    <summary>Connection refused o timeout hacia la base</summary>
+    <div class="in"><p>Usa el Session pooler de Supabase y <code>DB_SSL_MODE=require</code>. Revisa host, usuario y contraseña en las variables de entorno.</p></div>
+  </details>
+  <details>
+    <summary>El front muestra un error de CORS</summary>
+    <div class="in"><p><code>CORS_ORIGINS</code> debe contener la URL exacta del front, sin <code>/</code> al final.</p></div>
+  </details>
+  <details>
+    <summary>Al abrir la dirección del servicio sale un error 500</summary>
+    <div class="in"><p>Es normal si abres solo la raíz (<code>/</code>): la API no tiene nada en esa ruta. Prueba <code>/api/tareas</code> o <code>/actuator/health</code>.</p></div>
+  </details>
+  <details>
+    <summary>La primera petición tarda casi un minuto</summary>
+    <div class="in"><p>Es normal en el plan Free: el servicio se duerme tras unos 15 minutos sin tráfico y tarda en despertar.</p></div>
+  </details>
+  <details>
+    <summary>Front: El sitio abre en blanco o responde 404</summary>
+    <div class="in">
+      <p>Casi siempre es la carpeta de salida. En Vercel entra al proyecto → <em>Settings</em> → <em>Build and Output Settings</em>, activa el lápiz de <strong>Output Directory</strong> y escribe la ruta real:</p>
+      <pre><button class="copy" type="button">Copiar</button><code>dist/&lt;nombre-del-proyecto&gt;/browser</code></pre>
+      <p>El nombre sale de la clave <code>projects</code> en tu <code>angular.json</code>. Guarda y vuelve a desplegar.</p>
+    </div>
+  </details>
+  <details>
+    <summary>Front: El build falla</summary>
+    <div class="in">
+      <p>Abre <strong>Build Logs</strong> y lee las últimas líneas. Causas habituales:</p>
+      <ul class="l">
+        <li>El proyecto no compila en tu equipo con <code>npm run build</code>. Corrígelo primero ahí.</li>
+        <li>Un archivo escrito con otra mayúscula o minúscula en un import. Linux distingue entre <code>Board.ts</code> y <code>board.ts</code>; Windows no.</li>
+        <li>Falta una dependencia en <code>package.json</code> que solo tenías instalada de forma global.</li>
+      </ul>
+    </div>
+  </details>
+  <details>
+    <summary>Front: Mi repositorio no aparece en la lista</summary>
+    <div class="in">
+      <p>Repite el paso 9: <em>Adjust GitHub App Permissions</em>, agrega el repo y guarda. Si el repo es de una organización de GitHub, el plan Hobby no lo permite.</p>
+    </div>
+  </details>
+</section>
+
+<section class="block" id="limites">
+  <h2>Límites de los planes gratis</h2>
+
+  <h3>Render (backend)</h3>
+  <ul class="l">
+    <li>El servicio se <strong>duerme tras unos 15 minutos sin tráfico</strong>; despertar tarda entre 30 y 60 segundos.</li>
+    <li>El disco es efímero: no guardes datos en archivos locales. Los datos van en PostgreSQL.</li>
+    <li>Un <code>git push</code> redespliega solo si el servicio se creó con <em>Git Provider</em>. Con <em>Public Git Repository</em> hay que usar <strong>Manual Deploy → Deploy latest commit</strong>.</li>
+    <li>No hay acceso SSH ni pestaña Shell en el plan Free.</li>
+    <li>Para mantenerlo despierto en una demo, un monitor externo (por ejemplo UptimeRobot) puede consultar <code>/actuator/health</code> cada 10 minutos.</li>
+  </ul>
+
+  <h3>Supabase (base de datos)</h3>
+  <ul class="l">
+    <li>El plan Free incluye 500 MB de base de datos, más que suficiente para este proyecto.</li>
+    <li>Un proyecto sin uso durante un tiempo puede pausarse.</li>
+  </ul>
+
+  <h3>Vercel (frontend)</h3>
+  <p>Según la <a href="https://vercel.com/docs/limits" target="_blank" rel="noopener">documentación oficial de Vercel</a> (revisada en noviembre de 2026):</p>
+  <div class="tw"><table>
+    <thead><tr><th></th><th>Hobby</th><th>Pro</th></tr></thead>
+    <tbody>
+      <tr><td>Proyectos</td><td>200</td><td>Ilimitados</td></tr>
+      <tr><td>Despliegues por día</td><td>100</td><td>6000</td></tr>
+      <tr><td>Proyectos por repo de Git</td><td>25</td><td>150</td></tr>
+    </tbody>
+  </table></div>
+  <p>El plan Hobby no permite conectar repositorios que pertenezcan a una organización de GitHub: el repo debe estar en tu cuenta personal.</p>
+</section>
+<footer>Manual elaborado con capturas reales de Eclipse, Supabase, Render, Vercel y HeidiSQL. Los nombres de pantallas y botones están en inglés porque así los muestran esas herramientas.</footer>
 </main>
 </div>
 </div>
