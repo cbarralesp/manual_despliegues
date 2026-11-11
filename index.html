@@ -652,6 +652,43 @@ git push origin main</code></pre>
   <figure><button type="button" aria-label="Ampliar captura"><img src="img/38-tablero-funcionando.png" alt="Tablero Kanban en Vercel con tres tareas repartidas en las columnas Por hacer, En curso y Hecha" loading="lazy"></button><figcaption>El front en Vercel, conectado al backend de Render y a la base en Supabase: las tres tareas de ejemplo aparecen en sus columnas.</figcaption></figure>
   <p>Estas tareas no vienen del front: pasan por toda la cadena <strong>Vercel → Render → Supabase</strong>. Para comprobar que también se guardan, crea una tarea con <strong>+ Nueva tarea</strong>, recarga la página y verifica que sigue ahí. Después puedes verla en el <em>Table Editor</em> de Supabase.</p>
   <div class="note warn"><strong>Si tarda o falla</strong>Si el backend de Render estaba dormido, la primera carga puede tardar hasta un minuto o mostrar un error. Espera y recarga. Es el comportamiento normal del plan Free.</div>
+
+  <h3>13.6 Si cambias o recreas el servicio de Render</h3>
+  <p>La dirección <code>https://&lt;servicio&gt;.onrender.com</code> pertenece a ese servicio. Si lo borras y creas otro, Render asigna una dirección <strong>nueva</strong> (el nombre más un sufijo) y la anterior deja de existir. Tu <code>vercel.json</code> sigue apuntando a la vieja.</p>
+  <p><strong>Síntoma:</strong> el sitio abre, pero el tablero muestra el banner rojo y la consola del navegador (<strong>F12 → Console</strong>) dice <em>Failed to load resource: … api/tareas … 404</em>.</p>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/44-front-404-devtools.png" alt="Tablero con banner de error y la consola de DevTools mostrando un 404 en api/tareas" loading="lazy"></button><figcaption>El tablero en Vercel con el banner de error y, a la derecha, el 404 de <code>api/tareas</code> en la consola.</figcaption></figure>
+  <p><strong>Cómo arreglarlo:</strong></p>
+  <ol class="l">
+    <li>En Render abre tu servicio nuevo, comprueba que diga <strong>Live</strong> y copia su dirección: está justo debajo del nombre.</li>
+    <li>Prueba la API directo en el navegador, antes de tocar nada: <code>https://&lt;servicio-nuevo&gt;.onrender.com/api/tareas</code>. Debe mostrar el JSON de las tareas.</li>
+    <li>En <code>vercel.json</code> cambia solo la línea <code>destination</code>, sin quitar <code>/api/:path*</code> del final.</li>
+    <li>Guarda, haz commit y push. Vercel redespliega solo; espera a que quede en <em>Ready</em> y recarga con <strong>Ctrl + F5</strong>.</li>
+  </ol>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/46-render-url-nueva.png" alt="Panel del servicio en Render con estado Live y la dirección onrender.com bajo el nombre" loading="lazy"></button><figcaption>La dirección del servicio aparece bajo su nombre, junto al estado <em>Live</em>. Ese es el valor para <code>destination</code>.</figcaption></figure>
+  <pre><button class="copy" type="button">Copiar</button><code>git add vercel.json
+git commit -m "Apuntar el front al nuevo backend en Render"
+git push origin main</code></pre>
+  <div class="note"><strong>Para que no vuelva a pasar</strong>No borres el servicio de Render para actualizarlo. Usa <strong>Manual Deploy → Deploy latest commit</strong>. Si cambias de base de datos, edita las variables en <strong>Environment</strong> del mismo servicio: Render lo reinicia con la misma dirección.</div>
+
+  <h3>13.7 Qué dirección de Vercel compartir</h3>
+  <p>En el detalle de un despliegue, Vercel muestra dos direcciones en <strong>Domains</strong>:</p>
+  <ul class="l">
+    <li><strong><code>nombre.vercel.app</code></strong> (icono de globo): el dominio de producción. Es fijo y se mantiene igual en cada despliegue. Es el que se comparte.</li>
+    <li><strong><code>nombre-&lt;código&gt;-&lt;usuario&gt;.vercel.app</code></strong>: la dirección de ese despliegue puntual. Cambia con cada push y puede pedir iniciar sesión en Vercel.</li>
+  </ul>
+  <figure><button type="button" aria-label="Ampliar captura"><img src="img/45-vercel-dominios.png" alt="Detalle de un despliegue en Vercel con estado Ready, entorno Production y dos dominios" loading="lazy"></button><figcaption>Despliegue en <em>Ready</em> y <em>Production</em>, con el dominio fijo y la dirección del despliegue.</figcaption></figure>
+
+  <h3>13.8 Qué revisar según el síntoma</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Síntoma</th><th>Causa probable</th><th>Qué revisar</th></tr></thead>
+    <tbody>
+      <tr><td>404 en <code>/api/tareas</code></td><td>La dirección de Render en <code>vercel.json</code> ya no existe</td><td>Línea <code>destination</code> (13.6)</td></tr>
+      <tr><td>404 al recargar <code>/tablero</code></td><td>Falta la regla hacia <code>index.html</code></td><td>Segunda regla de <code>vercel.json</code></td></tr>
+      <tr><td>Muy lento o error 502 / 504</td><td>Render estaba dormido</td><td>Espera uno o dos minutos y recarga</td></tr>
+      <tr><td>Error 500</td><td>Falla del backend o de la base</td><td><strong>Logs</strong> del servicio en Render</td></tr>
+      <tr><td>Cambié algo y no se ve</td><td>Despliegue sin terminar o caché</td><td>Espera <em>Ready</em> y pulsa <strong>Ctrl + F5</strong></td></tr>
+    </tbody>
+  </table></div>
 </section>
 
 <section class="block" id="despues">
@@ -715,6 +752,30 @@ order by installed_rank;</code></pre>
   <p>Las columnas de <code>tarea</code> son <code>id</code>, <code>titulo</code>, <code>descripcion</code>, <code>estado</code>, <code>prioridad</code>, <code>fecha_limite</code>, <code>creada_en</code> y <code>actualizada_en</code>.</p>
   <div class="note"><strong>Prueba para el aula</strong>Crea una tarea desde el tablero de Vercel y vuelve a ejecutar <code>select * from tarea;</code>. Debe aparecer una fila más: el tablero escribe en la misma base que estás consultando.</div>
 
+  <h3>5. Insertar, modificar y borrar tareas</h3>
+  <p>También puedes escribir datos desde HeidiSQL. La tabla se llama <code>tarea</code>, en singular. No incluyas <code>id</code>, <code>creada_en</code> ni <code>actualizada_en</code>: la base los llena sola.</p>
+  <p><strong>Insertar una tarea:</strong></p>
+  <pre><button class="copy" type="button">Copiar</button><code>insert into tarea (titulo, descripcion, estado, prioridad, fecha_limite)
+values ('Probar el despliegue', 'Revisar el tablero en Vercel', 'POR_HACER', 'ALTA', current_date + 3);</code></pre>
+  <p><strong>Insertar varias a la vez:</strong></p>
+  <pre><button class="copy" type="button">Copiar</button><code>insert into tarea (titulo, descripcion, estado, prioridad, fecha_limite) values
+  ('Crear el manual de Render', 'Con capturas del panel', 'POR_HACER', 'MEDIA', null),
+  ('Conectar con HeidiSQL', 'Probar la conexión a Supabase', 'EN_CURSO', 'ALTA', current_date + 2),
+  ('Subir el manual a GitHub', null, 'HECHA', 'BAJA', null);</code></pre>
+  <p><strong>Mover una tarea de columna o borrarla</strong> (cambia el <code>4</code> por el <code>id</code> de tu tarea):</p>
+  <pre><button class="copy" type="button">Copiar</button><code>update tarea set estado = 'EN_CURSO', actualizada_en = current_timestamp where id = 4;
+delete from tarea where id = 4;</code></pre>
+  <div class="tw"><table>
+    <thead><tr><th>Columna</th><th>Valores permitidos</th></tr></thead>
+    <tbody>
+      <tr><td>estado</td><td><code>POR_HACER</code>, <code>EN_CURSO</code> o <code>HECHA</code></td></tr>
+      <tr><td>prioridad</td><td><code>BAJA</code>, <code>MEDIA</code> o <code>ALTA</code></td></tr>
+      <tr><td>titulo</td><td>Obligatorio, máximo 100 caracteres</td></tr>
+      <tr><td>descripcion</td><td>Opcional, máximo 500 caracteres</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note warn"><strong>El límite de 3 en curso</strong>El tablero dice «máximo 3 en curso a la vez», pero esa regla la aplica el backend, no la base. Un <code>insert</code> directo con <code>EN_CURSO</code> se la salta y podrías dejar más de 3. Si insertas varias tareas, déjalas en <code>POR_HACER</code>.</div>
+  <p>Después de insertar, recarga el tablero con <strong>Ctrl + F5</strong>: las tareas aparecen en sus columnas.</p>
   <h3>¿Entrar al servidor de Render por SSH (MobaXterm)?</h3>
   <p>No es posible con el plan gratuito. Render lo avisa en la pantalla de creación: las instancias <em>Free</em> no soportan acceso SSH. Además, tu servicio es un contenedor Docker, no un servidor con una IP propia para entrar. Para ver qué hace la aplicación tienes estas opciones gratuitas:</p>
   <ul class="l">
@@ -829,9 +890,16 @@ git push origin main</code></pre>
   </details>
   <details>
     <summary>La primera petición tarda casi un minuto</summary>
-    <div class="in"><p>Es normal en el plan Free: el servicio se duerme tras unos 15 minutos sin tráfico y tarda en despertar.</p></div>
+    <div class="in"><p>Es normal en el plan Free: el servicio se duerme tras unos 15 minutos sin tráfico y tarda en despertar. Render lo avisa en el panel (<em>Your free instance will spin down with inactivity, which can delay requests by 50 seconds or more</em>). En una prueba real la primera respuesta tardó más de dos minutos. Espera y recarga: las siguientes peticiones son rápidas.</p></div>
   </details>
   <details>
+    <summary>El tablero muestra error y la consola dice 404 en api/tareas</summary>
+    <div class="in"><p>Casi siempre es porque recreaste el servicio de Render y su dirección cambió. Copia la dirección nueva y actualiza <code>destination</code> en <code>vercel.json</code>. Pasos completos en el apartado 13.6.</p></div>
+  </details>
+  <details>
+    <summary>HeidiSQL: password authentication failed</summary>
+    <div class="in"><p>Revisa que el usuario sea el del pooler, <code>postgres.&lt;ref-del-proyecto&gt;</code>, y no solo <code>postgres</code>. Revisa también la contraseña y que la sesión esté guardada (sin asterisco) antes de pulsar <strong>Abrir</strong>.</p></div>
+  </details>  <details>
     <summary>Front: El sitio abre en blanco o responde 404</summary>
     <div class="in">
       <p>Casi siempre es la carpeta de salida. En Vercel entra al proyecto → <em>Settings</em> → <em>Build and Output Settings</em>, activa el lápiz de <strong>Output Directory</strong> y escribe la ruta real:</p>
